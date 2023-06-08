@@ -1,3 +1,3 @@
 class Fonts {
-  static const PlayfairDisplay = 'PlayfairDisplay';
+  static const playfairDisplay = 'PlayfairDisplay';
 }

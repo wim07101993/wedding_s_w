@@ -13,14 +13,14 @@ class InvitationScreen extends StatelessWidget {
       body: PhotoView(imageProvider: Images.invitation),
       floatingActionButton: FloatingActionButton(
         onPressed: shareInvitation,
-        child: Icon(Icons.share),
+        child: const Icon(Icons.share),
       ),
     );
   }
 
   Future<void> shareInvitation() async {
     final data = await rootBundle.load(Images.invitationPath);
-    final x = await Share.shareXFiles(
+    final _ = await Share.shareXFiles(
       [
         XFile.fromData(
           data.buffer.asUint8List(),
@@ -29,6 +29,5 @@ class InvitationScreen extends StatelessWidget {
       ],
       text: 'Uitnodiging trouw Sara & Wim',
     );
-    print(x);
   }
 }

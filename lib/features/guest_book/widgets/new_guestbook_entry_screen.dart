@@ -1,9 +1,18 @@
-import 'package:camera/camera.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/loading_overlay.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
+import 'package:wedding_s_w/shared/get_it_provider.dart';
 
 class NewGuestbookEntryScreen extends StatefulWidget {
-  const NewGuestbookEntryScreen({super.key});
+  const NewGuestbookEntryScreen({
+    super.key,
+    required this.picture,
+  });
+
+  final XFile picture;
 
   @override
   State<NewGuestbookEntryScreen> createState() =>
@@ -11,75 +20,57 @@ class NewGuestbookEntryScreen extends StatefulWidget {
 }
 
 class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
-  static final Future<List<CameraDescription>> _availableCameras =
-      availableCameras();
+  late final messageController = TextEditingController();
 
-  CameraController? cameraController;
-  bool isTakingPicture = false;
+  Future<void> saveGuestbookEntry() async {
+    final result = await getIt<SaveGuestbookEntry>()(
+      NewGuestbookEntry(
+        picture: widget.picture,
+        message: messageController.text,
+      ),
+    );
 
-  @override
-  void initState() {
-    super.initState();
-    initCameras();
-  }
-
-  Future<void> initCameras() async {
-    final cameras = await _availableCameras;
     if (!mounted) {
       return;
     }
 
-    if (cameras.isEmpty) {
-      // TODO show error dialog
-      return;
-    }
-    final camera = cameras
-            .where((c) => c.lensDirection == CameraLensDirection.front)
-            .firstOrNull ??
-        cameras.first;
-
-    final cameraController = CameraController(camera, ResolutionPreset.max);
-    await cameraController.initialize();
-    setState(() => this.cameraController = cameraController);
-  }
-
-  Future<void> takePicture() async {
-    final cameraController = this.cameraController;
-    if (cameraController == null) {
-      return;
-    }
-    setState(() => isTakingPicture = true);
-    final picture = await cameraController.takePicture();
-    setState(() => isTakingPicture = false);
+    result.whenSuccess((_) => Navigator.of(context).pop());
   }
 
   @override
   Widget build(BuildContext context) {
-    final cameraController = this.cameraController;
-    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          if (cameraController != null)
-            Center(child: CameraPreview(cameraController)),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Align(
-              alignment: orientation == Orientation.portrait
-                  ? Alignment.bottomCenter
-                  : Alignment.centerRight,
-              child: IconButton.filled(
-                onPressed: takePicture,
-                icon: const Icon(Icons.camera, size: 42),
+          Center(child: _picture()),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MessageField(controller: messageController),
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton.filled(
+                    onPressed: saveGuestbookEntry,
+                    icon: const Icon(Icons.send, size: 32),
+                  ),
+                ],
               ),
             ),
           ),
-          if (cameraController == null) LoadingOverlay(label: 'camera laden'),
-          if (isTakingPicture) LoadingOverlay(label: 'foto verwerken'),
         ],
       ),
+    );
+  }
+
+  Widget _picture() {
+    return Image(
+      image: FileImage(File(widget.picture.path)),
     );
   }
 }

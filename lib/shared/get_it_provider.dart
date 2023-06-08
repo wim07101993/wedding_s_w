@@ -26,6 +26,10 @@ class GetItProvider extends InheritedWidget {
   }
 }
 
-extension StateExtensions<T extends StatefulWidget> on State<T> {
+extension GetItStateExtensions<T extends StatefulWidget> on State<T> {
   GetIt get getIt => GetItProvider.of(context).getIt;
+}
+
+extension GetItWidgetExtensions on StatelessWidget {
+  GetIt getIt(BuildContext context) => GetItProvider.of(context).getIt;
 }

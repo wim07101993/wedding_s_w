@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Image(image: Images.homeHeader),
+          const Image(image: Images.homeHeader),
           Text(
             'TROUW',
             textAlign: TextAlign.center,
@@ -33,21 +33,22 @@ class HomeScreen extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
-            childAspectRatio: 1,
             children: [
               NavigationTile(
                 onTap: () {
                   Navigator.of(context).pushNamed(route<GuestbookScreen>());
                 },
                 title: const Text('gastenboek'),
-                child: Image(image: Images.guestbookTile, fit: BoxFit.cover),
+                child:
+                    const Image(image: Images.guestbookTile, fit: BoxFit.cover),
               ),
               NavigationTile(
                 onTap: () {
                   Navigator.of(context).pushNamed(route<InvitationScreen>());
                 },
                 title: const Text('Uitnodiging bekijken'),
-                child: Image(image: Images.invitationTile, fit: BoxFit.cover),
+                child: const Image(
+                    image: Images.invitationTile, fit: BoxFit.cover),
               ),
             ],
           ),

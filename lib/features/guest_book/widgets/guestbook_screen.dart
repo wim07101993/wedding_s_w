@@ -1,29 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry_screen.dart';
-import 'package:wedding_s_w/shared/routing.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/add_guestbook_entry_button.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_list.dart';
 
-class GuestbookScreen extends StatefulWidget {
+class GuestbookScreen extends StatelessWidget {
   const GuestbookScreen({super.key});
 
   @override
-  State<GuestbookScreen> createState() => _GuestbookScreenState();
-}
-
-class _GuestbookScreenState extends State<GuestbookScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          Text('TODO gastenboek items'),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).pushNamed(route<NewGuestbookEntryScreen>());
-        },
-        label: Text('Iets in het gastenboek schrijven'),
-      ),
+    return const Scaffold(
+      body: GuestbookEntryList(),
+      floatingActionButton: AddGuestbookEntryButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

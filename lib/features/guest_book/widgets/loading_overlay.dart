@@ -22,7 +22,7 @@ class LoadingOverlay extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 label,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ],
           ),

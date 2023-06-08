@@ -23,12 +23,12 @@ final appTheme = ThemeData(
   colorScheme: _colors,
   textTheme: TextTheme(
     headlineLarge: TextStyle(
-      fontFamily: Fonts.PlayfairDisplay,
+      fontFamily: Fonts.playfairDisplay,
       fontSize: 52,
       color: _colors.primary,
     ),
     headlineSmall: TextStyle(
-      fontFamily: Fonts.PlayfairDisplay,
+      fontFamily: Fonts.playfairDisplay,
       fontSize: 16,
       fontWeight: FontWeight.bold,
       color: _colors.primary,
@@ -36,5 +36,10 @@ final appTheme = ThemeData(
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: _colors.primary,
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: _colors.primary,
+    labelStyle: TextStyle(color: _colors.onPrimary),
+    side: BorderSide.none,
   ),
 );
