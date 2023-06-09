@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/shared/resources/fonts.dart';
 
-const _primaryColor = Color(0xFFDF8D53);
+const _primaryColor = Color(0xFF84B370);
+const _secondaryColor = Color(0xFFDF8D53);
 const _colors = ColorScheme(
   brightness: Brightness.light,
   primary: _primaryColor,
   onPrimary: Colors.white,
-  secondary: Color(0xFF2A77BB),
+  secondary: _secondaryColor,
   onSecondary: Colors.white,
   error: Color(0xFFD53A47),
   onError: Colors.white,
-  background: Colors.white,
+  background: Colors.transparent,
   onBackground: Colors.black,
   surface: Colors.white70,
   onSurface: Colors.black,
@@ -25,7 +26,7 @@ final appTheme = ThemeData(
     headlineLarge: TextStyle(
       fontFamily: Fonts.playfairDisplay,
       fontSize: 52,
-      color: _colors.primary,
+      color: _colors.secondary,
     ),
     headlineSmall: TextStyle(
       fontFamily: Fonts.playfairDisplay,
@@ -38,8 +39,9 @@ final appTheme = ThemeData(
     backgroundColor: _colors.primary,
   ),
   chipTheme: ChipThemeData(
-    backgroundColor: _colors.primary,
+    backgroundColor: _colors.primary.withOpacity(0.6),
     labelStyle: TextStyle(color: _colors.onPrimary),
     side: BorderSide.none,
   ),
+  scaffoldBackgroundColor: Colors.white,
 );

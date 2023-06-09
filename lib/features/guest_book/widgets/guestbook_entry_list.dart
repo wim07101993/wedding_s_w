@@ -13,7 +13,8 @@ class GuestbookEntryList extends StatefulWidget {
 
 class _GuestbookEntryListState extends State<GuestbookEntryList> {
   final pagingController = PagingController<DateTime, GuestbookEntry>(
-      firstPageKey: DateTime.now().toUtc());
+    firstPageKey: DateTime.now().toUtc(),
+  );
   late final getGuestbookEntries = getIt<GetGuestBookEntries>();
 
   @override

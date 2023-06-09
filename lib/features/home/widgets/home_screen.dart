@@ -39,8 +39,10 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(route<GuestbookScreen>());
                 },
                 title: const Text('gastenboek'),
-                child:
-                    const Image(image: Images.guestbookTile, fit: BoxFit.cover),
+                child: const Image(
+                  image: Images.guestbookTile,
+                  fit: BoxFit.cover,
+                ),
               ),
               NavigationTile(
                 onTap: () {
@@ -48,7 +50,9 @@ class HomeScreen extends StatelessWidget {
                 },
                 title: const Text('Uitnodiging bekijken'),
                 child: const Image(
-                    image: Images.invitationTile, fit: BoxFit.cover),
+                  image: Images.invitationTile,
+                  fit: BoxFit.cover,
+                ),
               ),
             ],
           ),

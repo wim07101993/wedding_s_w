@@ -22,7 +22,6 @@ class GetGuestbookEntryPicture extends Behaviour<String, Uint8List?> {
     final directory = await getApplicationDocumentsDirectory();
     final localFile = File('${directory.path}/$guestbookEntryId');
     if (await localFile.exists()) {
-      print('getting from local storage');
       return localFile.readAsBytes();
     }
     final picture = await storage.picture(guestbookEntryId).getData();

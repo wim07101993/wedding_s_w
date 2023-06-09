@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/guestbook_message.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_picture.dart';
 
 class GuestbookEntryCard extends StatelessWidget {
@@ -24,15 +25,15 @@ class GuestbookEntryCard extends StatelessWidget {
           fit: StackFit.passthrough,
           children: [
             GuestbookPicture(guestbookEntryId: guestbookEntry.id),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Chip(
-                  label: Text(guestbookEntry.message),
+            if (guestbookEntry.message.isNotEmpty)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GuestbookMessage(guestbookEntry: guestbookEntry),
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),
