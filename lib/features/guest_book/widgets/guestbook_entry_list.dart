@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
-import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/get_new_entries_stream.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_card.dart';
 import 'package:wedding_s_w/shared/get_it_provider.dart';
 
@@ -31,10 +31,14 @@ class _GuestbookEntryListState extends State<GuestbookEntryList> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _changesSubscription = getIt<FirebaseFirestore>()
-        .guestbookEntries
-        .snapshots()
-        .listen((event) => pagingController.refresh());
+    getIt<GetNewEntriesStream>()().thenWhenSuccess((stream) {
+      return _changesSubscription = stream.listen(
+        (entry) => pagingController.itemList = [
+          entry,
+          ...pagingController.itemList ?? [],
+        ],
+      );
+    });
   }
 
   @override

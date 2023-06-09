@@ -52,35 +52,40 @@ class GetGuestBookEntries
         .limit(pageSize)
         .get();
 
-    final entries =
-        snapshot.docs.map(mapDocToGuestbookEntry).toList(growable: false);
+    final entries = snapshot.docs
+        .map((doc) => mapDocToGuestbookEntry(doc, getGuestbookEntryPicture))
+        .toList(growable: false);
     final validEntries =
         entries.whereType<GuestbookEntry>().toList(growable: false);
 
     return validEntries;
   }
+}
 
-  GuestbookEntry? mapDocToGuestbookEntry(
-    QueryDocumentSnapshot<Map<String, dynamic>> doc,
-  ) {
-    final data = doc.data();
-
-    final id = data.maybeGet<String>('id');
-    final timestamp = data.maybeGet<DateTime>('timestamp');
-    final message = data.maybeGet<String>('message');
-    if (id == null || timestamp == null || message == null) {
-      return null;
-    }
-
-    final entry = GuestbookEntry(
-      id: id,
-      timestamp: timestamp,
-      message: message,
-    );
-
-    getGuestbookEntryPicture(id)
-        .thenWhenSuccess((picture) => entry.picture = picture);
-
-    return entry;
+GuestbookEntry? mapDocToGuestbookEntry(
+  DocumentSnapshot<Map<String, dynamic>> doc,
+  GetGuestbookEntryPicture getGuestbookEntryPicture,
+) {
+  final data = doc.data();
+  if (data == null) {
+    return null;
   }
+
+  final id = data.maybeGet<String>('id');
+  final timestamp = data.maybeGet<DateTime>('timestamp');
+  final message = data.maybeGet<String>('message');
+  if (id == null || timestamp == null || message == null) {
+    return null;
+  }
+
+  final entry = GuestbookEntry(
+    id: id,
+    timestamp: timestamp,
+    message: message,
+  );
+
+  getGuestbookEntryPicture(id)
+      .thenWhenSuccess((picture) => entry.picture = picture);
+
+  return entry;
 }
