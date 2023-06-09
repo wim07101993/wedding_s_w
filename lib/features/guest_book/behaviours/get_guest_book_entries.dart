@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:behaviour/behaviour.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry_picture.dart';
 import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
 import 'package:wedding_s_w/shared/json_extensions.dart';
 
@@ -9,7 +13,7 @@ class GuestbookPageQuery {
   final DateTime lastItemTime;
 }
 
-class GuestbookEntry {
+class GuestbookEntry extends ChangeNotifier {
   GuestbookEntry({
     required this.id,
     required this.timestamp,
@@ -19,6 +23,7 @@ class GuestbookEntry {
   final String id;
   final DateTime timestamp;
   final String message;
+  Uint8List? picture;
 }
 
 class GetGuestBookEntries
@@ -26,9 +31,11 @@ class GetGuestBookEntries
   GetGuestBookEntries({
     super.monitor,
     required this.firestore,
+    required this.getGuestbookEntryPicture,
   });
 
   final FirebaseFirestore firestore;
+  final GetGuestbookEntryPicture getGuestbookEntryPicture;
 
   @override
   Future<List<GuestbookEntry>> action(
@@ -65,10 +72,15 @@ class GetGuestBookEntries
       return null;
     }
 
-    return GuestbookEntry(
+    final entry = GuestbookEntry(
       id: id,
       timestamp: timestamp,
       message: message,
     );
+
+    getGuestbookEntryPicture(id)
+        .thenWhenSuccess((picture) => entry.picture = picture);
+
+    return entry;
   }
 }

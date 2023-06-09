@@ -12,7 +12,11 @@ void initializeGuestbook(GetIt getIt) {
     ),
   );
   getIt.registerFactory(
-    () => GetGuestBookEntries(monitor: getIt(), firestore: getIt()),
+    () => GetGuestBookEntries(
+      monitor: getIt(),
+      firestore: getIt(),
+      getGuestbookEntryPicture: getIt(),
+    ),
   );
   getIt.registerFactory(
     () => GetGuestbookEntryPicture(monitor: getIt(), storage: getIt()),

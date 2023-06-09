@@ -19,12 +19,32 @@ class GuestbookEntryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: SizedBox(
-        height: 400,
+      child: InkWell(
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: buildDetailWidget)),
+        child: SizedBox(
+          height: 400,
+          child: heroWidget(false),
+        ),
+      ),
+    );
+  }
+
+  Widget buildDetailWidget(BuildContext context) {
+    return Material(child: heroWidget(true));
+  }
+
+  Widget heroWidget(bool canResizeImage) {
+    return Hero(
+      tag: 'guestbookentry_${guestbookEntry.id}',
+      child: Material(
         child: Stack(
           fit: StackFit.passthrough,
           children: [
-            GuestbookPicture(guestbookEntryId: guestbookEntry.id),
+            GuestbookPicture(
+              guestbookEntry: guestbookEntry,
+              canResize: canResizeImage,
+            ),
             if (guestbookEntry.message.isNotEmpty)
               Padding(
                 padding:

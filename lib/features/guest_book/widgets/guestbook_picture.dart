@@ -1,39 +1,40 @@
 import 'package:behaviour/behaviour.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry_picture.dart';
 import 'package:wedding_s_w/shared/get_it_provider.dart';
 
 class GuestbookPicture extends StatefulWidget {
   const GuestbookPicture({
     super.key,
-    required this.guestbookEntryId,
+    required this.guestbookEntry,
+    required this.canResize,
   });
 
-  final String guestbookEntryId;
+  final GuestbookEntry guestbookEntry;
+  final bool canResize;
 
   @override
   State<GuestbookPicture> createState() => _GuestbookPictureState();
 }
 
 class _GuestbookPictureState extends State<GuestbookPicture> {
-  Uint8List? picture;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    getIt<GetGuestbookEntryPicture>()(widget.guestbookEntryId).thenWhenSuccess(
-      (picture) {
+    if (widget.guestbookEntry.picture == null) {
+      getIt<GetGuestbookEntryPicture>()(widget.guestbookEntry.id)
+          .thenWhenSuccess((picture) {
         if (mounted) {
-          setState(() => this.picture = picture);
+          setState(() => widget.guestbookEntry.picture = picture);
         }
-      },
-    );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final picture = this.picture;
     return Stack(
       fit: StackFit.passthrough,
       children: [
@@ -44,7 +45,19 @@ class _GuestbookPictureState extends State<GuestbookPicture> {
             child: CircularProgressIndicator(),
           ),
         ),
-        if (picture != null) Image.memory(picture, fit: BoxFit.fitWidth),
+        ListenableBuilder(
+          listenable: widget.guestbookEntry,
+          builder: (context, _) {
+            final picture = widget.guestbookEntry.picture;
+            if (picture == null) {
+              return const SizedBox();
+            } else if (widget.canResize) {
+              return PhotoView(imageProvider: MemoryImage(picture));
+            } else {
+              return Image.memory(picture, fit: BoxFit.fitWidth);
+            }
+          },
+        )
       ],
     );
   }
