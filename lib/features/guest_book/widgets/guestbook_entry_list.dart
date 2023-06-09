@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
+import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_card.dart';
 import 'package:wedding_s_w/shared/get_it_provider.dart';
 
@@ -13,9 +17,10 @@ class GuestbookEntryList extends StatefulWidget {
 
 class _GuestbookEntryListState extends State<GuestbookEntryList> {
   final pagingController = PagingController<DateTime, GuestbookEntry>(
-    firstPageKey: DateTime.now().toUtc(),
+    firstPageKey: DateTime(2100),
   );
   late final getGuestbookEntries = getIt<GetGuestBookEntries>();
+  StreamSubscription? _changesSubscription;
 
   @override
   void initState() {
@@ -24,8 +29,18 @@ class _GuestbookEntryListState extends State<GuestbookEntryList> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _changesSubscription = getIt<FirebaseFirestore>()
+        .guestbookEntries
+        .snapshots()
+        .listen((event) => pagingController.refresh());
+  }
+
+  @override
   void dispose() {
     pagingController.dispose();
+    _changesSubscription?.cancel();
     super.dispose();
   }
 
@@ -47,24 +62,28 @@ class _GuestbookEntryListState extends State<GuestbookEntryList> {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<DateTime, GuestbookEntry>(
-      pagingController: pagingController,
-      builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, item, index) {
-          final itemCount = pagingController.value.itemList?.length ?? 0;
-          EdgeInsets padding;
-          if (index == 0) {
-            padding = const EdgeInsets.fromLTRB(16, 16, 16, 8);
-          } else if (index >= (itemCount - 1)) {
-            padding = const EdgeInsets.fromLTRB(16, 8, 16, 92);
-          } else {
-            padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 16);
-          }
-          return Padding(
-            padding: padding,
-            child: GuestbookEntryCard(key: Key(item.id), guestbookEntry: item),
-          );
-        },
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(() => pagingController.refresh()),
+      child: PagedListView<DateTime, GuestbookEntry>(
+        pagingController: pagingController,
+        builderDelegate: PagedChildBuilderDelegate(
+          itemBuilder: (context, item, index) {
+            final itemCount = pagingController.value.itemList?.length ?? 0;
+            EdgeInsets padding;
+            if (index == 0) {
+              padding = const EdgeInsets.fromLTRB(16, 16, 16, 8);
+            } else if (index >= (itemCount - 1)) {
+              padding = const EdgeInsets.fromLTRB(16, 8, 16, 92);
+            } else {
+              padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 16);
+            }
+            return Padding(
+              padding: padding,
+              child:
+                  GuestbookEntryCard(key: Key(item.id), guestbookEntry: item),
+            );
+          },
+        ),
       ),
     );
   }
