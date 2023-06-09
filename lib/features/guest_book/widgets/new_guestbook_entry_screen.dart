@@ -21,20 +21,27 @@ class NewGuestbookEntryScreen extends StatefulWidget {
 
 class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
   late final messageController = TextEditingController();
+  bool isSaving = false;
 
   Future<void> saveGuestbookEntry() async {
-    final result = await getIt<SaveGuestbookEntry>()(
-      NewGuestbookEntry(
-        picture: widget.picture,
-        message: messageController.text,
-      ),
-    );
+    try {
+      setState(() => isSaving = true);
 
-    if (!mounted) {
-      return;
+      final result = await getIt<SaveGuestbookEntry>()(
+        NewGuestbookEntry(
+          picture: widget.picture,
+          message: messageController.text,
+        ),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      result.whenSuccess((_) => Navigator.of(context).pop());
+    } finally {
+      setState(() => isSaving = false);
     }
-
-    result.whenSuccess((_) => Navigator.of(context).pop());
   }
 
   @override
@@ -49,20 +56,20 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MessageField(controller: messageController),
-                  ),
-                  const SizedBox(width: 16),
-                  IconButton.filled(
-                    onPressed: saveGuestbookEntry,
-                    icon: const Icon(Icons.send, size: 32),
-                  ),
-                ],
-              ),
+              child: _message(),
             ),
           ),
+          if (isSaving) ...[
+            const ColoredBox(color: Colors.black54),
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: CircularProgressIndicator()),
+                SizedBox(height: 8),
+                Text('Opslaan', style: TextStyle(color: Colors.white70)),
+              ],
+            ),
+          ],
         ],
       ),
     );
@@ -71,6 +78,21 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
   Widget _picture() {
     return Image(
       image: FileImage(File(widget.picture.path)),
+    );
+  }
+
+  Widget _message() {
+    return Row(
+      children: [
+        Expanded(
+          child: MessageField(controller: messageController),
+        ),
+        const SizedBox(width: 16),
+        IconButton.filled(
+          onPressed: saveGuestbookEntry,
+          icon: const Icon(Icons.send, size: 32),
+        ),
+      ],
     );
   }
 }
