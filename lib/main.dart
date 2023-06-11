@@ -4,28 +4,37 @@ import 'dart:developer';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wedding_s_w/features/guest_book/guest_book.dart';
+import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_screen.dart';
 import 'package:wedding_s_w/features/home/widgets/home_screen.dart';
 import 'package:wedding_s_w/features/invitation/widgets/invitation_screen.dart';
-import 'package:wedding_s_w/shared/firebase/firebase.dart';
-import 'package:wedding_s_w/shared/get_it_provider.dart';
-import 'package:wedding_s_w/shared/logging/logging.dart';
+import 'package:wedding_s_w/shared/dependency_management/feature_manager.dart';
+import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
+import 'package:wedding_s_w/shared/firebase/firebase_feature.dart';
+import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 import 'package:wedding_s_w/shared/routing.dart';
 import 'package:wedding_s_w/shared/theme/theme.dart';
 
 Future<void> main() async {
   final getIt = GetIt.asNewInstance();
   runZonedGuarded(
-    () => runMyApp(getIt),
+    () => run(getIt),
     (error, stack) => onError(getIt, error, stack),
   );
 }
 
-Future<void> runMyApp(GetIt getIt) async {
-  initializeLogging(getIt);
-  await initializeFirebase(getIt);
-  initializeGuestbook(getIt);
+Future<void> run(GetIt getIt) async {
+  final featureManager = FeatureManager(
+    features: [
+      const LoggingFeature(),
+      FirebaseFeature(),
+      const GuestbookFeature(),
+    ],
+    getIt: getIt,
+  )..registerTypes();
+
+  await featureManager.install();
+
   runApp(
     GetItProvider(
       getIt: getIt,

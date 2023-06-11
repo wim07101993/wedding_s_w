@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry_picture.dart';
-import 'package:wedding_s_w/shared/get_it_provider.dart';
+import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
 class GuestbookPicture extends StatefulWidget {
   const GuestbookPicture({

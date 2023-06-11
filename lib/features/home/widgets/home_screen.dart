@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_screen.dart';
 import 'package:wedding_s_w/features/home/widgets/navigation_tile.dart';
 import 'package:wedding_s_w/features/invitation/widgets/invitation_screen.dart';
+import 'package:wedding_s_w/features/locations/widgets/LocationsScreen.dart';
 import 'package:wedding_s_w/shared/resources/images.dart';
-import 'package:wedding_s_w/shared/routing.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,7 +36,11 @@ class HomeScreen extends StatelessWidget {
             children: [
               NavigationTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed(route<GuestbookScreen>());
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const GuestbookScreen(),
+                    ),
+                  );
                 },
                 title: const Text('gastenboek'),
                 child: const Image(
@@ -46,13 +50,28 @@ class HomeScreen extends StatelessWidget {
               ),
               NavigationTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed(route<InvitationScreen>());
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const InvitationScreen(),
+                    ),
+                  );
                 },
                 title: const Text('Uitnodiging bekijken'),
                 child: const Image(
                   image: Images.invitationTile,
                   fit: BoxFit.cover,
                 ),
+              ),
+              NavigationTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const LocationsScreen(),
+                    ),
+                  );
+                },
+                title: const Text('Locaties'),
+                child: const Image(image: Images.map, fit: BoxFit.cover),
               ),
             ],
           ),

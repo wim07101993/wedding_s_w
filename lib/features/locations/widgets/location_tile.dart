@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NavigationTile extends StatelessWidget {
-  const NavigationTile({
+class LocationTile extends StatelessWidget {
+  const LocationTile({
     super.key,
     required this.onTap,
     required this.title,
@@ -16,12 +16,11 @@ class NavigationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 0.5,
-      color: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
       clipBehavior: Clip.antiAlias,
-      child: GestureDetector(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: InkWell(
         onTap: onTap,
         child: GridTile(
           footer: GridTileBar(

@@ -6,7 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_new_entries_stream.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_card.dart';
-import 'package:wedding_s_w/shared/get_it_provider.dart';
+import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
 class GuestbookEntryList extends StatefulWidget {
   const GuestbookEntryList({super.key});
