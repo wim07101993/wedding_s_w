@@ -1,18 +1,15 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
+@RoutePage()
 class NewGuestbookEntryScreen extends StatefulWidget {
-  const NewGuestbookEntryScreen({
-    super.key,
-    required this.picture,
-  });
-
-  final XFile picture;
+  const NewGuestbookEntryScreen({super.key});
 
   @override
   State<NewGuestbookEntryScreen> createState() =>
@@ -22,14 +19,27 @@ class NewGuestbookEntryScreen extends StatefulWidget {
 class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
   late final messageController = TextEditingController();
   bool isSaving = false;
+  XFile? picture;
+
+  @override
+  void initState() {
+    super.initState();
+    takePicture();
+  }
 
   Future<void> saveGuestbookEntry() async {
+    final picture = this.picture;
+    if (picture == null) {
+      // TODO log: this should not happen
+      return;
+    }
+
     try {
       setState(() => isSaving = true);
 
       final result = await getIt<SaveGuestbookEntry>()(
         NewGuestbookEntry(
-          picture: widget.picture,
+          picture: picture,
           message: messageController.text,
         ),
       );
@@ -41,6 +51,19 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
       result.whenSuccess((_) => Navigator.of(context).pop());
     } finally {
       setState(() => isSaving = false);
+    }
+  }
+
+  Future<void> takePicture() async {
+    final picker = ImagePicker();
+    final picture = await picker.pickImage(source: ImageSource.camera);
+    if (!mounted) {
+      return;
+    }
+    if (picture == null) {
+      AutoRouter.of(context).pop();
+    } else {
+      setState(() => this.picture = picture);
     }
   }
 
@@ -76,9 +99,11 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
   }
 
   Widget _picture() {
-    return Image(
-      image: FileImage(File(widget.picture.path)),
-    );
+    final picture = this.picture;
+
+    return picture == null
+        ? const SizedBox()
+        : Image(image: FileImage(File(picture.path)));
   }
 
   Widget _message() {

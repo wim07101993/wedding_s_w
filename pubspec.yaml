@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.0.3 <4.0.0'
 
 dependencies:
+  auto_route: '>=7.0.0 <8.0.0'
   behaviour: '>=2.0.0 <3.0.0'
   cloud_firestore: '>=4.0.0 <5.0.0'
   firebase_app_check: '>=0.0.0 <1.0.0'
@@ -27,6 +28,8 @@ dependencies:
   uuid: '>=3.0.0 <4.0.0'
 
 dev_dependencies:
+  auto_route_generator: '>=7.0.0 <8.0.0'
+  build_runner:
   flutter_test:
     sdk: flutter
   lint: '>=2.0.0 <3.0.0'

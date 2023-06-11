@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_screen.dart';
 import 'package:wedding_s_w/features/home/widgets/navigation_tile.dart';
@@ -8,6 +9,7 @@ import 'package:wedding_s_w/shared/dependency_management/global_value_builder.da
 import 'package:wedding_s_w/shared/firebase/remote_config_global_value.dart';
 import 'package:wedding_s_w/shared/resources/images.dart';
 
+@RoutePage()
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

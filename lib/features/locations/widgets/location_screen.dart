@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/locations/widgets/location_tile.dart';
 import 'package:wedding_s_w/shared/maps_launcher.dart';
 import 'package:wedding_s_w/shared/resources/images.dart';
 
+@RoutePage()
 class LocationsScreen extends StatelessWidget {
   const LocationsScreen({super.key});
 
