@@ -10,14 +10,24 @@ Uri createQueryUri(String query) {
 
   if (kIsWeb) {
     uri = Uri.https(
-        'www.google.com', '/maps/search/', {'api': '1', 'query': query});
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': query},
+    );
   } else if (Platform.isAndroid) {
-    uri = Uri(scheme: 'geo', host: '0,0', queryParameters: {'q': query});
+    uri = Uri(
+      scheme: 'geo',
+      host: '0,0',
+      queryParameters: {'q': query},
+    );
   } else if (Platform.isIOS) {
     uri = Uri.https('maps.apple.com', '/', {'q': query});
   } else {
     uri = Uri.https(
-        'www.google.com', '/maps/search/', {'api': '1', 'query': query});
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': query},
+    );
   }
 
   return uri;
@@ -29,8 +39,11 @@ Uri createCoordinatesUri(double latitude, double longitude, [String? label]) {
   Uri uri;
 
   if (kIsWeb) {
-    uri = Uri.https('www.google.com', '/maps/search/',
-        {'api': '1', 'query': '$latitude,$longitude'});
+    uri = Uri.https(
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': '$latitude,$longitude'},
+    );
   } else if (Platform.isAndroid) {
     var query = '$latitude,$longitude';
 
@@ -45,8 +58,11 @@ Uri createCoordinatesUri(double latitude, double longitude, [String? label]) {
 
     uri = Uri.https('maps.apple.com', '/', params);
   } else {
-    uri = Uri.https('www.google.com', '/maps/search/',
-        {'api': '1', 'query': '$latitude,$longitude'});
+    uri = Uri.https(
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': '$latitude,$longitude'},
+    );
   }
 
   return uri;
@@ -64,7 +80,10 @@ Future<bool> launchQuery(String query) {
 /// The maps application will show the specified coordinates.
 /// Returns a Future that resolves to true if the maps application
 /// was launched successfully, false otherwise.
-Future<bool> launchCoordinates(double latitude, double longitude,
-    [String? label]) {
+Future<bool> launchCoordinates(
+  double latitude,
+  double longitude, [
+  String? label,
+]) {
   return launchUrl(createCoordinatesUri(latitude, longitude, label));
 }

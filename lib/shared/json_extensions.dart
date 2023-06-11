@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 extension JsonExtensions on Map<String, dynamic> {
   T get<T>(String key) {
-    final value = maybeGet(key);
+    final value = maybeGet<T>(key);
     if (value is T) {
       return value;
     } else {

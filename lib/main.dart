@@ -25,10 +25,10 @@ Future<void> main() async {
 
 Future<void> run(GetIt getIt) async {
   final featureManager = FeatureManager(
-    features: [
-      const LoggingFeature(),
+    features: const [
+      LoggingFeature(),
       FirebaseFeature(),
-      const GuestbookFeature(),
+      GuestbookFeature(),
     ],
     getIt: getIt,
   )..registerTypes();
