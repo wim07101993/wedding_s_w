@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "2.2.0"
   build_runner:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: build_runner
       sha256: "5e1929ad37d48bd382b124266cb8e521de5548d406a45a5ae6656c13dab73e37"
@@ -664,6 +664,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  oauth2:
+    dependency: transitive
+    description:
+      name: oauth2
+      sha256: c4013ef62be37744efdc0861878fd9e9285f34db1f9e331cc34100d7674feb42
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   package_config:
     dependency: transitive
     description:
@@ -728,6 +736,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.7"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
@@ -853,6 +869,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  spotify:
+    dependency: "direct main"
+    description:
+      name: spotify
+      sha256: c7c3f157f052143f713477bd5a764b080a0023ed084428bd0cf5a9e3bc260cc6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.0"
   stack_trace:
     dependency: transitive
     description:
