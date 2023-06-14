@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry_picture.dart';
 import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
+import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
 import 'package:wedding_s_w/shared/json_extensions.dart';
 
 class GuestbookPageQuery {
@@ -12,20 +13,30 @@ class GuestbookPageQuery {
     required this.lastItemTime,
   });
 
-  final DateTime lastItemTime;
+  final DateTime? lastItemTime;
 }
 
-class GuestbookEntry extends ChangeNotifier {
-  GuestbookEntry({
+class _GuestbookEntry extends ChangeNotifier implements GuestbookEntry {
+  _GuestbookEntry({
     required this.id,
     required this.timestamp,
     required this.message,
   });
 
+  Uint8List? _picture;
+
+  @override
   final String id;
+  @override
   final DateTime timestamp;
+  @override
   final String message;
-  Uint8List? picture;
+  @override
+  Uint8List? get picture => _picture;
+  set picture(Uint8List? value) {
+    _picture = value;
+    notifyListeners();
+  }
 }
 
 class GetGuestBookEntries
@@ -44,16 +55,21 @@ class GetGuestBookEntries
     GuestbookPageQuery input,
     BehaviourTrack? track,
   ) async {
-    const pageSize = 10;
-    final startAt = Timestamp.fromMicrosecondsSinceEpoch(
-      input.lastItemTime.microsecondsSinceEpoch - 1,
-    );
-    final snapshot = await firestore.guestbookEntries
-        .orderBy('timestamp', descending: true)
-        .startAt([startAt])
-        .limit(pageSize)
-        .get();
+    const pageSize = 5;
+    final lastItemTimestamp = input.lastItemTime;
 
+    var query =
+        firestore.guestbookEntries.orderBy('timestamp', descending: true);
+    if (lastItemTimestamp != null) {
+      query = query.startAt([
+        Timestamp.fromMillisecondsSinceEpoch(
+          lastItemTimestamp.millisecondsSinceEpoch - 1,
+        ),
+      ]);
+    }
+    query = query.limit(pageSize);
+
+    final snapshot = await query.get();
     final entries = snapshot.docs
         .map((doc) => mapDocToGuestbookEntry(doc, getGuestbookEntryPicture))
         .toList(growable: false);
@@ -80,7 +96,7 @@ GuestbookEntry? mapDocToGuestbookEntry(
     return null;
   }
 
-  final entry = GuestbookEntry(
+  final entry = _GuestbookEntry(
     id: id,
     timestamp: timestamp,
     message: message,

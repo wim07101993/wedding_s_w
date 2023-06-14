@@ -1,54 +1,34 @@
 import 'dart:async';
 
-import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/get_new_entries_stream.dart';
+import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_card.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
 class GuestbookEntryList extends StatefulWidget {
-  const GuestbookEntryList({super.key});
+  const GuestbookEntryList({
+    super.key,
+    required this.controller,
+  });
+
+  final PagingController<DateTime?, GuestbookEntry> controller;
 
   @override
   State<GuestbookEntryList> createState() => _GuestbookEntryListState();
 }
 
 class _GuestbookEntryListState extends State<GuestbookEntryList> {
-  final pagingController = PagingController<DateTime, GuestbookEntry>(
-    firstPageKey: DateTime.now().add(const Duration(days: 1)),
-  );
   late final getGuestbookEntries = getIt<GetGuestBookEntries>();
-  StreamSubscription? _changesSubscription;
 
   @override
   void initState() {
     super.initState();
-    pagingController.addPageRequestListener(fetchPage);
+    widget.controller.addPageRequestListener(fetchPage);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    getIt<GetNewEntriesStream>()().thenWhenSuccess((stream) {
-      return _changesSubscription = stream.listen(
-        (entry) => pagingController.itemList = [
-          entry,
-          ...pagingController.itemList ?? [],
-        ],
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    pagingController.dispose();
-    _changesSubscription?.cancel();
-    super.dispose();
-  }
-
-  Future<void> fetchPage(DateTime lastEntryTimestamp) async {
+  Future<void> fetchPage(DateTime? lastEntryTimestamp) async {
     final response = await getGuestbookEntries(
       GuestbookPageQuery(lastItemTime: lastEntryTimestamp),
     );
@@ -56,8 +36,8 @@ class _GuestbookEntryListState extends State<GuestbookEntryList> {
       return;
     }
     response.when(
-      (exception) => pagingController.error = exception,
-      (value) => pagingController.appendPage(
+      (exception) => widget.controller.error = exception,
+      (value) => widget.controller.appendPage(
         value,
         value.lastOrNull?.timestamp,
       ),
@@ -67,12 +47,12 @@ class _GuestbookEntryListState extends State<GuestbookEntryList> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => Future.sync(() => pagingController.refresh()),
-      child: PagedListView<DateTime, GuestbookEntry>(
-        pagingController: pagingController,
+      onRefresh: () => Future.sync(() => widget.controller.refresh()),
+      child: PagedListView<DateTime?, GuestbookEntry>(
+        pagingController: widget.controller,
         builderDelegate: PagedChildBuilderDelegate(
           itemBuilder: (context, item, index) {
-            final itemCount = pagingController.value.itemList?.length ?? 0;
+            final itemCount = widget.controller.value.itemList?.length ?? 0;
             EdgeInsets padding;
             if (index == 0) {
               padding = const EdgeInsets.fromLTRB(16, 16, 16, 8);

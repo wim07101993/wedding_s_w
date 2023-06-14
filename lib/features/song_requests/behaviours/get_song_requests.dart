@@ -28,7 +28,10 @@ class GetSongRequests
     const pageSize = 30;
     final lastItemTimestamp = input.lastItemTime;
 
-    var query = firestore.songRequests.orderBy('timestamp', descending: true);
+    var query = firestore.songRequests.orderBy(
+      SongRequest.timestampFieldName,
+      descending: true,
+    );
     if (lastItemTimestamp != null) {
       query = query.startAt([
         Timestamp.fromMillisecondsSinceEpoch(

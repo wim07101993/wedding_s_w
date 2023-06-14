@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
+import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_message.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_picture.dart';
 

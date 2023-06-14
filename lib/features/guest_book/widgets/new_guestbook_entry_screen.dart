@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
+import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 
 @RoutePage()
 class NewGuestbookEntryScreen extends StatefulWidget {
@@ -13,10 +14,10 @@ class NewGuestbookEntryScreen extends StatefulWidget {
 
   @override
   State<NewGuestbookEntryScreen> createState() =>
-      _NewGuestbookScreenEntryState();
+      _NewGuestbookEntryScreenState();
 }
 
-class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
+class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
   late final messageController = TextEditingController();
   bool isSaving = false;
   XFile? picture;
@@ -30,25 +31,26 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
   Future<void> saveGuestbookEntry() async {
     final picture = this.picture;
     if (picture == null) {
-      // TODO log: this should not happen
+      getIt
+          .logger<NewGuestbookEntryScreen>()
+          .warning('picture is null when saving guestbook item!!');
       return;
     }
 
     try {
       setState(() => isSaving = true);
 
-      final result = await getIt<SaveGuestbookEntry>()(
-        NewGuestbookEntry(
-          picture: picture,
-          message: messageController.text,
-        ),
+      final newEntry = NewGuestbookEntry(
+        pictureFile: picture,
+        message: messageController.text,
       );
+      final result = await getIt<SaveGuestbookEntry>()(newEntry);
 
       if (!mounted) {
         return;
       }
 
-      result.whenSuccess((_) => Navigator.of(context).pop());
+      result.whenSuccess((_) => Navigator.of(context).pop(newEntry));
     } finally {
       setState(() => isSaving = false);
     }
@@ -61,7 +63,7 @@ class _NewGuestbookScreenEntryState extends State<NewGuestbookEntryScreen> {
       return;
     }
     if (picture == null) {
-      AutoRouter.of(context).pop();
+      AutoRouter.of(context).pop(null);
     } else {
       setState(() => this.picture = picture);
     }

@@ -1,11 +1,8 @@
-import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry_picture.dart';
-import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
+import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
 
-class GuestbookPicture extends StatefulWidget {
+class GuestbookPicture extends StatelessWidget {
   const GuestbookPicture({
     super.key,
     required this.guestbookEntry,
@@ -14,24 +11,6 @@ class GuestbookPicture extends StatefulWidget {
 
   final GuestbookEntry guestbookEntry;
   final bool canResize;
-
-  @override
-  State<GuestbookPicture> createState() => _GuestbookPictureState();
-}
-
-class _GuestbookPictureState extends State<GuestbookPicture> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (widget.guestbookEntry.picture == null) {
-      getIt<GetGuestbookEntryPicture>()(widget.guestbookEntry.id)
-          .thenWhenSuccess((picture) {
-        if (mounted) {
-          setState(() => widget.guestbookEntry.picture = picture);
-        }
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +25,12 @@ class _GuestbookPictureState extends State<GuestbookPicture> {
           ),
         ),
         ListenableBuilder(
-          listenable: widget.guestbookEntry,
+          listenable: guestbookEntry,
           builder: (context, _) {
-            final picture = widget.guestbookEntry.picture;
+            final picture = guestbookEntry.picture;
             if (picture == null) {
               return const SizedBox();
-            } else if (widget.canResize) {
+            } else if (canResize) {
               return PhotoView(imageProvider: MemoryImage(picture));
             } else {
               return Image.memory(picture, fit: BoxFit.fitWidth);
