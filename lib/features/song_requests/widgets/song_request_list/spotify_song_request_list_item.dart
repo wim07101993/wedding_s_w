@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/song_requests/models/spotify_song_request.dart';
 import 'package:wedding_s_w/shared/string_extensions.dart';
 
-class SongSuggestion extends StatelessWidget {
-  const SongSuggestion({
+class SpotifySongRequestListItem extends StatelessWidget {
+  const SpotifySongRequestListItem({
     super.key,
     required this.song,
-    required this.onTap,
+    this.onTap,
   });
 
   final SpotifySong song;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +28,31 @@ class SongSuggestion extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       tileColor: theme.cardColor,
-      leading: albumCoverUrl != null ? Image.network(albumCoverUrl) : null,
+      leading: albumCoverUrl != null ? _albumCoverUrl(albumCoverUrl) : null,
       title: Text(
         title ?? 'Geen titel',
         style: TextStyle(color: theme.primaryColor),
       ),
       subtitle: subtitle == null ? null : Text(subtitle),
+    );
+  }
+
+  Widget _albumCoverUrl(String url) {
+    return Image.network(
+      url,
+      loadingBuilder: (context, widget, chunk) {
+        if (chunk == null) {
+          return widget;
+        }
+        final total = chunk.expectedTotalBytes;
+        if (total == null) {
+          return const CircularProgressIndicator();
+        }
+        final downloaded = chunk.cumulativeBytesLoaded;
+        return CircularProgressIndicator(
+          value: downloaded.toDouble() / total.toDouble(),
+        );
+      },
     );
   }
 }

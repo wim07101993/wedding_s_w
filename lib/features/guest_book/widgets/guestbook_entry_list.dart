@@ -17,7 +17,7 @@ class GuestbookEntryList extends StatefulWidget {
 
 class _GuestbookEntryListState extends State<GuestbookEntryList> {
   final pagingController = PagingController<DateTime, GuestbookEntry>(
-    firstPageKey: DateTime(2100),
+    firstPageKey: DateTime.now().add(const Duration(days: 1)),
   );
   late final getGuestbookEntries = getIt<GetGuestBookEntries>();
   StreamSubscription? _changesSubscription;

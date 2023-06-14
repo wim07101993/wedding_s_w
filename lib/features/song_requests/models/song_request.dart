@@ -3,34 +3,32 @@ import 'package:wedding_s_w/features/song_requests/models/free_input_song_reques
 import 'package:wedding_s_w/features/song_requests/models/spotify_song_request.dart';
 
 abstract class SongRequest {
-  const SongRequest();
-
   factory SongRequest.fromSpotifyTrack(TrackSimple track) =
       SpotifySong.fromSpotifyTrack;
 
-  factory SongRequest.freeInput({required String input}) = FreeInputSongRequest;
+  factory SongRequest.freeInput({required String input}) =
+      FreeInputSongRequest.fromInput;
 
   factory SongRequest.fromFirebase(Map<String, dynamic> json) {
-    if (_songRequestIs<SpotifySong>(json)) {
+    final type = json['type'];
+    if (type == SpotifySong.typeName) {
       return SpotifySong.fromJson(json);
-    } else if (_songRequestIs<FreeInputSongRequest>(json)) {
+    } else if (type == FreeInputSongRequest.typeName) {
       return FreeInputSongRequest.fromJson(json);
     } else {
       throw Exception('unknown song request type $json');
     }
   }
 
-  Map<String, dynamic> toJson();
+  DateTime get timestamp;
 
-  Map<String, dynamic> toFirebase() {
-    final json = toJson();
-    return {
-      'type': runtimeType.toString(),
-      ...json,
-    };
-  }
+  Map<String, dynamic> toFirebase();
 
-  static bool _songRequestIs<T>(Map<String, dynamic> json) {
-    return json['type'] == T.toString();
-  }
+  T when<T>({
+    required T Function(SpotifySong song) spotifySong,
+    required T Function(FreeInputSongRequest song) freeInputSongRequest,
+  });
+
+  static const String typeFieldName = 'type';
+  static const String timestampFieldName = 'timestamp';
 }

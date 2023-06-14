@@ -8,7 +8,9 @@ import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.da
 import 'package:wedding_s_w/shared/json_extensions.dart';
 
 class GuestbookPageQuery {
-  GuestbookPageQuery({required this.lastItemTime});
+  const GuestbookPageQuery({
+    required this.lastItemTime,
+  });
 
   final DateTime lastItemTime;
 }

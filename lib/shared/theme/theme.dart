@@ -22,6 +22,7 @@ const _colors = ColorScheme(
 final appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: _colors,
+  dividerTheme: const DividerThemeData(color: Colors.black26),
   textTheme: TextTheme(
     headlineLarge: TextStyle(
       fontFamily: Fonts.playfairDisplay,

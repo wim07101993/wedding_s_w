@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/song_requests/behaviours/search_songs.dart';
 import 'package:wedding_s_w/features/song_requests/models/song_request.dart';
 import 'package:wedding_s_w/features/song_requests/models/spotify_song_request.dart';
-import 'package:wedding_s_w/features/song_requests/widgets/track_suggestion.dart';
+import 'package:wedding_s_w/features/song_requests/widgets/song_request_list/spotify_song_request_list_item.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 import 'package:wedding_s_w/shared/string_extensions.dart';
 
-class SearchField extends StatefulWidget {
-  const SearchField({
+class SearchTextField extends StatefulWidget {
+  const SearchTextField({
     super.key,
     required this.onControllerChanged,
     required this.onSelectSong,
@@ -18,10 +18,10 @@ class SearchField extends StatefulWidget {
   final void Function(SongRequest song) onSelectSong;
 
   @override
-  State<SearchField> createState() => _SearchFieldState();
+  State<SearchTextField> createState() => _SearchTextFieldState();
 }
 
-class _SearchFieldState extends State<SearchField> {
+class _SearchTextFieldState extends State<SearchTextField> {
   late final SearchSongs searchSongs = getIt();
   var _searchController = TextEditingController();
 
@@ -58,6 +58,7 @@ class _SearchFieldState extends State<SearchField> {
             hintText: 'Liedje dat je wil aanvragen',
           ),
           onSubmitted: (value) => onSubmitted(),
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
         );
       },
       optionsBuilder: (value) => value.text.length < 3
@@ -90,6 +91,7 @@ class SearchFieldOptions extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: Material(
         elevation: 4,
+        color: Colors.white,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 400),
           child: ListView(
@@ -97,7 +99,7 @@ class SearchFieldOptions extends StatelessWidget {
             shrinkWrap: true,
             children: songs
                 .map(
-                  (song) => SongSuggestion(
+                  (song) => SpotifySongRequestListItem(
                     song: song,
                     onTap: () => onSelected(song),
                   ),
