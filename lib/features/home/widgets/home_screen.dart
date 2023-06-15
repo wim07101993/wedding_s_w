@@ -4,7 +4,6 @@ import 'package:wedding_s_w/features/home/widgets/tiles/dj_suggestions_tile.dart
 import 'package:wedding_s_w/features/home/widgets/tiles/guestbook_tile.dart';
 import 'package:wedding_s_w/features/home/widgets/tiles/invitation_tile.dart';
 import 'package:wedding_s_w/features/home/widgets/tiles/location_tile.dart';
-import 'package:wedding_s_w/features/home/widgets/tiles/quiz_tile.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 import 'package:wedding_s_w/shared/dependency_management/global_value_builder.dart';
 import 'package:wedding_s_w/shared/firebase/remote_config_global_value.dart';
@@ -48,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   const InvitationTile(),
                   const LocationTile(),
                   const DjSuggestionsTile(),
-                  const QuizTile()
+                  // const QuizTile()
                 ],
               ),
             ),
