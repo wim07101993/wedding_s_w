@@ -13,4 +13,5 @@ class Images {
   static const home = AssetImage('assets/images/home.jpg');
   static const map = AssetImage('assets/images/map.png');
   static const dj = AssetImage('assets/images/dj.png');
+  static const quiz = AssetImage('assets/images/quiz.png');
 }
