@@ -47,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                   const InvitationTile(),
                   const LocationTile(),
                   const DjSuggestionsTile(),
-                  // const QuizTile()
                 ],
               ),
             ),
