@@ -13,7 +13,7 @@ const _colors = ColorScheme(
   onError: Colors.white,
   background: Colors.transparent,
   onBackground: Colors.black,
-  surface: Colors.white70,
+  surface: Colors.white,
   onSurface: Colors.black,
   surfaceTint: _primaryColor,
   surfaceVariant: Colors.green,
@@ -23,6 +23,9 @@ final appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: _colors,
   dividerTheme: const DividerThemeData(color: Colors.black26),
+  inputDecorationTheme: const InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.black38),
+  ),
   textTheme: TextTheme(
     headlineLarge: TextStyle(
       fontFamily: Fonts.playfairDisplay,

@@ -33,11 +33,6 @@ class _SearchTextFieldState extends State<SearchTextField> {
     widget.onControllerChanged(newController);
   }
 
-  void onSongSelected(SpotifySong song) {
-    _searchController.clear();
-    widget.onSelectSong(song);
-  }
-
   String displayStringForSong(SpotifySong song) {
     final title = song.title ?? 'Geen titel';
     final artist = song.artists.join(', ').nullIfEmpty;
@@ -47,15 +42,20 @@ class _SearchTextFieldState extends State<SearchTextField> {
   @override
   Widget build(BuildContext context) {
     return Autocomplete<SpotifySong>(
-      onSelected: onSongSelected,
+      onSelected: widget.onSelectSong,
       displayStringForOption: displayStringForSong,
       fieldViewBuilder: (context, controller, focusNode, onSubmitted) {
         onSearchControllerChanged(controller);
         return TextField(
           controller: controller,
           focusNode: focusNode,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Liedje dat je wil aanvragen',
+            helperText: 'Vul het liedje in dat je wil aanvragen',
+            suffixIcon: IconButton(
+              onPressed: () => _searchController.clear(),
+              icon: const Icon(Icons.clear),
+            ),
           ),
           onSubmitted: (value) => onSubmitted(),
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),

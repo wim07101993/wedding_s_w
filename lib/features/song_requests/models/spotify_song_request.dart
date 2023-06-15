@@ -51,7 +51,7 @@ class SpotifySong implements SongRequest {
     return {
       SongRequest.typeFieldName: typeName,
       SongRequest.timestampFieldName: timestamp,
-      'spotifyId': spotifyId,
+      idFieldName: spotifyId,
       'title': title,
       'artists': artists,
       'albumName': albumName,
@@ -68,4 +68,5 @@ class SpotifySong implements SongRequest {
   }
 
   static const String typeName = 'SpotifySongRequest';
+  static const String idFieldName = 'spotifyId';
 }

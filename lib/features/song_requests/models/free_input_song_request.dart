@@ -6,20 +6,24 @@ class FreeInputSongRequest implements SongRequest {
   const FreeInputSongRequest({
     required this.timestamp,
     required this.input,
+    required this.inputToLower,
   });
 
   FreeInputSongRequest.fromInput({
     required this.input,
-  }) : timestamp = DateTime.now();
+  })  : timestamp = DateTime.now(),
+        inputToLower = input.toLowerCase();
 
   factory FreeInputSongRequest.fromJson(Map<String, dynamic> json) {
     return FreeInputSongRequest(
-      timestamp: json.get('timestamp'),
-      input: json.get('input'),
+      timestamp: json.get(SongRequest.timestampFieldName),
+      input: json.get(inputFieldName),
+      inputToLower: json.get(inputToLowerFieldName),
     );
   }
 
   final String input;
+  final String inputToLower;
   @override
   final DateTime timestamp;
 
@@ -28,7 +32,8 @@ class FreeInputSongRequest implements SongRequest {
     return {
       SongRequest.typeFieldName: typeName,
       SongRequest.timestampFieldName: timestamp,
-      'input': input,
+      inputFieldName: input,
+      inputToLowerFieldName: inputToLower
     };
   }
 
@@ -41,4 +46,6 @@ class FreeInputSongRequest implements SongRequest {
   }
 
   static const String typeName = 'FreeInputSongRequest';
+  static const String inputFieldName = 'input';
+  static const String inputToLowerFieldName = 'inputToLower';
 }
