@@ -46,7 +46,8 @@ class HomeScreen extends StatelessWidget {
                     const GuestbookTile(),
                   const InvitationTile(),
                   const LocationTile(),
-                  const DjSuggestionsTile(),
+                  if (config.featureFlags.shouldDjSuggestionsBeVisible)
+                    const DjSuggestionsTile(),
                 ],
               ),
             ),
