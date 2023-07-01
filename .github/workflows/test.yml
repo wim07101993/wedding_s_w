@@ -18,11 +18,14 @@ jobs:
       - run: flutter doctor -v
 
       - name: Install dependencies
+        working-directory: ./app
         run: flutter pub get
 
       - name: Verify formatting
+        working-directory: ./app
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze project source
+        working-directory: ./app
         run: dart analyze --fatal-infos
         
