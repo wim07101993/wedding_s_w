@@ -10,7 +10,7 @@ abstract class SongRequest {
       FreeInputSongRequest.fromInput;
 
   factory SongRequest.fromFirebase(Map<String, dynamic> json) {
-    final type = json['type'];
+    final type = json[typeFieldName];
     if (type == SpotifySong.typeName) {
       return SpotifySong.fromJson(json);
     } else if (type == FreeInputSongRequest.typeName) {
