@@ -50,13 +50,14 @@ jobs:
       
       - run: flutter doctor -v
       - run: flutter pub get
+        working-directory: ./app
 
       - name: Configure Google services
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: android
+        working-directory: ./app/android
 
       - name: Configure Keystore
         run: |
@@ -70,17 +71,20 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-        working-directory: android
+        working-directory: ./app/android
         
       - name: Build appbundle
+        working-directory: ./app
         run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
       - name: Stage artifact file
+        working-directory: ./app
         run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_PATH }}
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
+          working-directory: ./app
           name: ${{ env.ANDROID_ARTIFACT }}
           path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
@@ -104,14 +108,16 @@ jobs:
           java-version: 17
       
       - run: flutter doctor -v
+        working-directory: ./app
       - run: flutter pub get
-
+        working-directory: ./app
+        
       - name: Configure Google services
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: android
+        working-directory: ./app/android
 
       - name: Configure Keystore
         run: |
@@ -125,17 +131,20 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-        working-directory: android
+        working-directory: ./app/android
         
       - name: Build apk
         run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
-      
+        working-directory: ./app
+        
       - name: Stage artifact file
         run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_PATH }}
-      
+        working-directory: ./app
+        
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
+          working-directory: ./app
           name: ${{ env.ANDROID_ARTIFACT }}
           path:  ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
@@ -149,6 +158,7 @@ jobs:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3
         with:
+          working-directory: ./app
           name: ${{ env.ANDROID_ARTIFACT }}
 
       - name: Create service_account.json
@@ -157,6 +167,7 @@ jobs:
       - name: Upload to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
+          working-directory: ./app
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.wedding_s_w
           releaseFiles: wedding_s_w.aab
