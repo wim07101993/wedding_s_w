@@ -5,7 +5,7 @@ class Images {
   static const homeHeader = AssetImage('assets/images/home_header.png');
   static const homeFooter = AssetImage('assets/images/home_footer.png');
   static const invitation = AssetImage(invitationPath);
-  static const invitationPath = 'assets/images/invitation.png';
+  static const invitationPath = 'assets/images/church-invitation.png';
   static const invitationTile = AssetImage('assets/images/invitation-tile.png');
   static const townHall = AssetImage('assets/images/town_hall.jpg');
   static const church = AssetImage('assets/images/church.jpg');

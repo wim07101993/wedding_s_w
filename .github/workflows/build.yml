@@ -50,13 +50,14 @@ jobs:
       
       - run: flutter doctor -v
       - run: flutter pub get
+        working-directory: ./app
 
       - name: Configure Google services
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: android
+        working-directory: ./app/android
 
       - name: Configure Keystore
         run: |
@@ -70,13 +71,14 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-        working-directory: android
+        working-directory: ./app/android
         
       - name: Build appbundle
+        working-directory: ./app
         run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
       - name: Stage artifact file
-        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_PATH }}
+        run: mv ./app/build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_PATH }}
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
@@ -104,14 +106,16 @@ jobs:
           java-version: 17
       
       - run: flutter doctor -v
+        working-directory: ./app
       - run: flutter pub get
-
+        working-directory: ./app
+        
       - name: Configure Google services
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: android
+        working-directory: ./app/android
 
       - name: Configure Keystore
         run: |
@@ -125,14 +129,15 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-        working-directory: android
+        working-directory: ./app/android
         
       - name: Build apk
         run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
-      
+        working-directory: ./app
+        
       - name: Stage artifact file
-        run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_PATH }}
-      
+        run: mv ./app/build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_PATH }}
+        
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
