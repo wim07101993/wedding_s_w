@@ -47,5 +47,8 @@ final appTheme = ThemeData(
     labelStyle: TextStyle(color: _colors.onPrimary),
     side: BorderSide.none,
   ),
+  dialogTheme: const DialogTheme(
+    backgroundColor: Colors.white,
+  ),
   scaffoldBackgroundColor: Colors.white,
 );
