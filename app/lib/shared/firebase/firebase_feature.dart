@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -37,5 +38,6 @@ class FirebaseFeature extends Feature {
         kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity;
     await FirebaseAppCheck.instance.activate(androidProvider: androidProvider);
     await getIt<RemoteConfigGlobalValue>().initialize();
+    FirebaseAuth.instance.signInAnonymously();
   }
 }

@@ -1,0 +1,15 @@
+ext.keystoreProperties = new Properties()
+ext.keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+ext.keystoreKeyAlias = keystoreProperties['keyAlias']
+ext.keystoreKeyPassword = keystoreProperties['keyPassword']
+def keystoreFilePath = keystoreProperties['file']
+if (keystoreFilePath != null) {
+    ext.keystoreFile = file(keystoreProperties['file'])
+} else {
+    ext.keystoreFile = null
+}
+ext.keystorePassword = keystoreProperties['password']
