@@ -24,12 +24,12 @@ Future<void> main() async {
 
 Future<void> run(GetIt getIt) async {
   final featureManager = FeatureManager(
-    features: const [
-      LoggingFeature(),
-      RoutingFeature(),
+    features: [
+      const LoggingFeature(),
+      const RoutingFeature(),
       FirebaseFeature(),
-      GuestbookFeature(),
-      SongRequestsFeature()
+      const GuestbookFeature(),
+      const SongRequestsFeature()
     ],
     getIt: getIt,
   )..registerTypes();
@@ -45,7 +45,7 @@ Future<void> run(GetIt getIt) async {
 }
 
 void onError(GetIt getIt, dynamic error, StackTrace stack) {
-  if (getIt.isRegistered<FirebaseCrashlytics>()) {
+  if (getIt<FirebaseFeature>().isInstalled) {
     getIt<FirebaseCrashlytics>().recordError(error, stack);
   } else {
     log('ERROR: $error at $stack');

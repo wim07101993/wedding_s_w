@@ -12,7 +12,9 @@ import 'package:wedding_s_w/shared/firebase/remote_config_global_value.dart';
 import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 
 class FirebaseFeature extends Feature {
-  const FirebaseFeature();
+  FirebaseFeature();
+
+  bool isInstalled = false;
 
   @override
   void registerTypes(GetIt getIt) {
@@ -35,7 +37,11 @@ class FirebaseFeature extends Feature {
     await Firebase.initializeApp();
     const androidProvider =
         kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity;
-    await FirebaseAppCheck.instance.activate(androidProvider: androidProvider);
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: androidProvider,
+      appleProvider: AppleProvider.appAttest,
+    );
     await getIt<RemoteConfigGlobalValue>().initialize();
+    isInstalled = true;
   }
 }
