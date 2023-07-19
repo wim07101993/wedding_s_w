@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: auto_route
-      sha256: "1d53010ec30ad3b91e6d4701b18fc503e3d1bbf570f4c3277b74b6359263ab16"
+      sha256: "46037eb6acfefcb3627f1baeef1ea0ce4eed2d01dba26e060d4a231dc4f3c29c"
       url: "https://pub.dev"
     source: hosted
-    version: "7.7.0"
+    version: "7.7.1"
   auto_route_generator:
     dependency: "direct dev"
     description:
@@ -532,10 +532,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: d2bab152deb2547ea6f53d82ebca9b7e77386bb706e5789e815d37e08ea475bb
+      sha256: "8179b54039b50eee561676232304f487602e2950ffb3e8995ed9034d6505ca34"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.7+3"
+    version: "0.8.7+4"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -841,10 +841,10 @@ packages:
     dependency: transitive
     description:
       name: sliver_tools
-      sha256: ccdc502098a8bfa07b3ec582c282620031481300035584e1bb3aca296a505e8c
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.10"
+    version: "0.2.12"
   source_gen:
     dependency: transitive
     description:
