@@ -35,11 +35,6 @@ class LocationsScreen extends StatelessWidget {
             title: const Text('Witte Zaal'),
             child: const Image(image: Images.witteZaal, fit: BoxFit.cover),
           ),
-          LocationTile(
-            onTap: () => launchCoordinates(50.9969162, 5.2507218),
-            title: const Text('Thuis'),
-            child: const Image(image: Images.home, fit: BoxFit.cover),
-          ),
         ],
       ),
     );
