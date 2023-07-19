@@ -14,6 +14,8 @@ import 'package:wedding_s_w/shared/firebase/firebase_feature.dart';
 import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 import 'package:wedding_s_w/shared/theme/theme.dart';
 
+final firebaseFeature = FirebaseFeature();
+
 Future<void> main() async {
   final getIt = GetIt.asNewInstance();
   runZonedGuarded(
@@ -27,7 +29,7 @@ Future<void> run(GetIt getIt) async {
     features: [
       const LoggingFeature(),
       const RoutingFeature(),
-      FirebaseFeature(),
+      firebaseFeature,
       const GuestbookFeature(),
       const SongRequestsFeature()
     ],
@@ -45,7 +47,7 @@ Future<void> run(GetIt getIt) async {
 }
 
 void onError(GetIt getIt, dynamic error, StackTrace stack) {
-  if (getIt<FirebaseFeature>().isInstalled) {
+  if (firebaseFeature.isInstalled) {
     getIt<FirebaseCrashlytics>().recordError(error, stack);
   } else {
     log('ERROR: $error at $stack');

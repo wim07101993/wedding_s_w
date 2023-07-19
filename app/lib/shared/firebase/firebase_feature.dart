@@ -35,11 +35,10 @@ class FirebaseFeature extends Feature {
   Future<void> install(GetIt getIt) async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
-    const androidProvider =
-        kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity;
     await FirebaseAppCheck.instance.activate(
-      androidProvider: androidProvider,
-      appleProvider: AppleProvider.appAttest,
+      androidProvider:
+          kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+      appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.appAttest,
     );
     await getIt<RemoteConfigGlobalValue>().initialize();
     isInstalled = true;
