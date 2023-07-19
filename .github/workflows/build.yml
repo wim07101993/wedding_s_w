@@ -7,6 +7,7 @@ on:
 
 env:
   ANDROID_ARTIFACT: android
+  IOS_ARTIFACT: iphone
 
 jobs:
   getVersion:
@@ -30,6 +31,10 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0
         
+  # -----------------------------------------------
+  # BUILD ANDROID
+  # -----------------------------------------------
+  
   buildAndroidAppBundle:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
@@ -167,3 +172,73 @@ jobs:
           releaseFiles: wedding_s_w.aab
           status: completed
           track: internal
+
+      
+  # -----------------------------------------------
+  # BUILD IOS
+  # -----------------------------------------------
+  
+  buildIos:
+    name: build iOS 🍏
+    runs-on: macos-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.ipa
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
+      - name: Import certificate and provisioning profile
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.APPLE_DISTRIBUTION_CERT }}
+          CERTIFICATE_PASSWORD: ${{ secrets.APPLE_DISTRIBUTION_CERT_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          echo create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/certificate.p12
+          PROFILE_PATH=$RUNNER_TEMP/profile.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          
+          echo import certificate and provisioning profile from secrets
+          echo -n "$CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$PROFILE_BASE64" | base64 --decode -o $PROFILE_PATH
+
+          echo create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          echo import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          echo apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PROFILE_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build ipa
+        run: flutter build ipa --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }} --export-options-plist=ios/Runner/ExportOptions.plist
+
+      - name: Stage artifact file
+        run: mv build/ios/ipa/*.ipa  ${{ env.ARTIFACT_PATH }}
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.IOS_ARTIFACT }}
+          path:  ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
+          
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
