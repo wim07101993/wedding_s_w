@@ -21,6 +21,13 @@ jobs:
         working-directory: ./app
         run: flutter pub get
 
+      - name: Create Firebase options
+        run: |
+          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: ./app
+        
       - name: Verify formatting
         working-directory: ./app
         run: dart format --output=none --set-exit-if-changed .
