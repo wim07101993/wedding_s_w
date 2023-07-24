@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
+import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/add_guestbook_entry_button.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_entry_list.dart';
+import 'package:wedding_s_w/features/routing/app_router.dart';
 import 'package:wedding_s_w/features/routing/app_router.gr.dart';
+import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
 @RoutePage()
 class GuestbookScreen extends StatefulWidget {
@@ -15,16 +17,15 @@ class GuestbookScreen extends StatefulWidget {
 }
 
 class _GuestbookScreenState extends State<GuestbookScreen> {
-  final pagingController = PagingController<DateTime?, GuestbookEntry>(
-    firstPageKey: null,
-  );
-
   Future<void> onAddGuestbookEntry() async {
-    final entry =
-        await AutoRouter.of(context).push(const NewGuestbookEntryRoute());
-    if (entry is! GuestbookEntry) {
+    final getIt = this.getIt;
+    final entry = await getIt
+        .get<AppRouter>()
+        .push<GuestbookEntry?>(const NewGuestbookEntryRoute());
+    if (entry == null) {
       return;
     }
+    final pagingController = getIt<GuestbookPagingController>();
     pagingController.itemList = [
       entry,
       ...pagingController.itemList ?? [],
@@ -33,14 +34,13 @@ class _GuestbookScreenState extends State<GuestbookScreen> {
 
   @override
   void dispose() {
-    pagingController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GuestbookEntryList(controller: pagingController),
+      body: const GuestbookEntryList(),
       floatingActionButton: AddGuestbookEntryButton(
         onTap: onAddGuestbookEntry,
       ),

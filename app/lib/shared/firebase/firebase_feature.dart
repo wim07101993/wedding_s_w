@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wedding_s_w/firebase_options.dart';
 import 'package:wedding_s_w/shared/dependency_management/feature.dart';
 import 'package:wedding_s_w/shared/firebase/remote_config_global_value.dart';
 import 'package:wedding_s_w/shared/logging/logging_feature.dart';
@@ -34,11 +35,14 @@ class FirebaseFeature extends Feature {
   @override
   Future<void> install(GetIt getIt) async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await FirebaseAppCheck.instance.activate(
       androidProvider:
           kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
       appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.appAttest,
+      webRecaptchaSiteKey: recaptchaKey,
     );
     await getIt<RemoteConfigGlobalValue>().initialize();
     isInstalled = true;

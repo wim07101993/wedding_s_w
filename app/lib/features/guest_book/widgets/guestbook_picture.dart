@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 
 class GuestbookPicture extends StatelessWidget {
   const GuestbookPicture({
@@ -14,6 +15,7 @@ class GuestbookPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final uri = guestbookEntry.pictureUri;
     return Stack(
       fit: StackFit.passthrough,
       children: [
@@ -24,19 +26,10 @@ class GuestbookPicture extends StatelessWidget {
             child: CircularProgressIndicator(),
           ),
         ),
-        ListenableBuilder(
-          listenable: guestbookEntry,
-          builder: (context, _) {
-            final picture = guestbookEntry.picture;
-            if (picture == null) {
-              return const SizedBox();
-            } else if (canResize) {
-              return PhotoView(imageProvider: MemoryImage(picture));
-            } else {
-              return Image.memory(picture, fit: BoxFit.fitWidth);
-            }
-          },
-        )
+        if (canResize)
+          PhotoView(imageProvider: CachedNetworkImageProvider(uri))
+        else
+          CachedNetworkImage(imageUrl: uri, fit: BoxFit.fitWidth)
       ],
     );
   }

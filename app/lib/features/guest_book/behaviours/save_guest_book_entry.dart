@@ -6,12 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
 import 'package:wedding_s_w/features/guest_book/firebase_storage_extensions.dart';
-import 'package:wedding_s_w/features/guest_book/models/guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 
-class NewGuestbookEntry extends ChangeNotifier implements GuestbookEntry {
+class NewGuestbookEntry extends ChangeNotifier {
   NewGuestbookEntry({
     required this.pictureFile,
     required this.message,
@@ -22,18 +21,13 @@ class NewGuestbookEntry extends ChangeNotifier implements GuestbookEntry {
     });
   }
 
-  @override
-  final String id = const Uuid().v1();
-  @override
   final DateTime timestamp = DateTime.now().toUtc();
-  @override
-  Uint8List? picture;
-  @override
   final String message;
   final XFile pictureFile;
+  Uint8List? picture;
 }
 
-class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, void> {
+class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, GuestbookEntry> {
   SaveGuestbookEntry({
     super.monitor,
     required this.storage,
@@ -44,12 +38,28 @@ class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, void> {
   final FirebaseFirestore firestore;
 
   @override
-  Future<void> action(NewGuestbookEntry input, BehaviourTrack? track) async {
-    await storage.picture(input.id).putFile(File(input.pictureFile.path));
-    await firestore.guestbookEntries.add({
-      'id': input.id,
+  Future<GuestbookEntry> action(
+    NewGuestbookEntry input,
+    BehaviourTrack? track,
+  ) async {
+    final reference = await firestore.guestbookEntries.add({
       'timestamp': input.timestamp,
       'message': input.message,
     });
+    final remotePicture = storage.picture(reference.id);
+    await remotePicture.putFile(
+      File(input.pictureFile.path),
+      SettableMetadata(
+        contentDisposition: input.pictureFile.name,
+        contentEncoding: 'image',
+      ),
+    );
+
+    return GuestbookEntry(
+      id: reference.id,
+      timestamp: input.timestamp,
+      message: input.message,
+      pictureUri: await remotePicture.getDownloadURL(),
+    );
   }
 }
