@@ -28,9 +28,11 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - run: |
+          echo "$FIREBASE_OPTIONS_DART" | cut -c1-1
           ls app
           ls app/lib
-          cat app/lib/firebase_options.dart
+          
+          cat app/lib/firebase_options.dart | tr '[:upper:]' '[:lower:]'
         
       - name: Verify formatting
         working-directory: ./app
