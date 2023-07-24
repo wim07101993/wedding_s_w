@@ -7,6 +7,8 @@ on:
 
 env:
   ANDROID_ARTIFACT: android
+  WEB_ARTIFACT: web
+  GITHUB_PAGES_ARTIFACT: githubPages
 
 jobs:
   getVersion:
@@ -106,7 +108,6 @@ jobs:
           java-version: 17
       
       - run: flutter doctor -v
-        working-directory: ./app
       - run: flutter pub get
         working-directory: ./app
         
@@ -167,3 +168,64 @@ jobs:
           releaseFiles: wedding_s_w.aab
           status: completed
           track: internal
+
+  buildWeb:
+    name: build web 🌐
+    runs-on: ubuntu-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: wedding_s_w/
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+        working-directory: ./app
+      
+      - name: Build app
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
+        working-directory: ./app
+        
+      - name: Stage artifact file
+        run: mv ./app/build/web/ ${{ env.ARTIFACT_PATH }}
+         
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.WEB_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
+          
+  buildGithubPages:
+    name: build github pages 🐙
+    runs-on: ubuntu-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: wedding_s_w/
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "/wedding_s_w/"
+        working-directory: ./app
+        
+      - name: Stage artifact file
+        run: mv ./app/build/web/ ${{ env.ARTIFACT_PATH }}
+         
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.GITHUB_PAGES_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
