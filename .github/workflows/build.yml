@@ -186,6 +186,13 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
       
+      - name: Configure Google services
+        run: |
+          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: ./app
+        
       - name: Build app
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
         working-directory: ./app
@@ -215,7 +222,15 @@ jobs:
       
       - run: flutter doctor -v
       - run: flutter pub get
+        working-directory: ./app
       
+      - name: Configure Google services
+        run: |
+          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: ./app
+        
       - name: Build app
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "/wedding_s_w/"
         working-directory: ./app
