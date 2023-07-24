@@ -54,20 +54,6 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
 
-      - name: Create Firebase options
-        run: |
-          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app
-        
-      - name: Configure Google services
-        run: |
-          echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app/android
-
       - name: Configure Keystore
         run: |
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
@@ -118,20 +104,6 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
         
-      - name: Create Firebase options
-        run: |
-          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app
-        
-      - name: Configure Google services
-        run: |
-          echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app/android
-
       - name: Configure Keystore
         run: |
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
@@ -200,13 +172,6 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
       
-      - name: Create Firebase options
-        run: |
-          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app
-        
       - name: Build app
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
         working-directory: ./app
@@ -237,14 +202,7 @@ jobs:
       - run: flutter doctor -v
       - run: flutter pub get
         working-directory: ./app
-      
-      - name: Create Firebase options
-        run: |
-          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app
-        
+           
       - name: Build app
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "/wedding_s_w/"
         working-directory: ./app
