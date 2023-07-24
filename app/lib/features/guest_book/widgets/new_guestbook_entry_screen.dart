@@ -4,11 +4,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 
-@RoutePage()
+@RoutePage<GuestbookEntry?>()
 class NewGuestbookEntryScreen extends StatefulWidget {
   const NewGuestbookEntryScreen({super.key});
 
@@ -40,17 +41,18 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
     try {
       setState(() => isSaving = true);
 
-      final newEntry = NewGuestbookEntry(
-        pictureFile: picture,
-        message: messageController.text,
+      final result = await getIt<SaveGuestbookEntry>()(
+        NewGuestbookEntry(
+          pictureFile: picture,
+          message: messageController.text,
+        ),
       );
-      final result = await getIt<SaveGuestbookEntry>()(newEntry);
 
       if (!mounted) {
         return;
       }
 
-      result.whenSuccess((_) => Navigator.of(context).pop(newEntry));
+      result.whenSuccess((newEntry) => Navigator.of(context).pop(newEntry));
     } finally {
       setState(() => isSaving = false);
     }

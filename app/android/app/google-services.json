@@ -1,0 +1,84 @@
+{
+  "project_info": {
+    "project_number": "462131427503",
+    "project_id": "weddingsw-3c88a",
+    "storage_bucket": "weddingsw-3c88a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462131427503:android:9ca0cb4be34b00539abc5a",
+        "android_client_info": {
+          "package_name": "com.wimvanlaer.wedding_s_w"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462131427503-0if2bketaem9q62lfknbiodrigefoqh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkOiLHYZkYgduCxxdXK8xSTxgZOYnzB2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462131427503-0if2bketaem9q62lfknbiodrigefoqh8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "462131427503-h0v80jr9anssk789klrq1qa0l81a5s5j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wimvanlaer.wedding-s-w",
+                "app_store_id": "6451343885"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462131427503:android:342c202bbec75c2f9abc5a",
+        "android_client_info": {
+          "package_name": "com.wimvanlaer.wedding_s_w.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462131427503-0if2bketaem9q62lfknbiodrigefoqh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkOiLHYZkYgduCxxdXK8xSTxgZOYnzB2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462131427503-0if2bketaem9q62lfknbiodrigefoqh8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "462131427503-h0v80jr9anssk789klrq1qa0l81a5s5j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wimvanlaer.wedding-s-w",
+                "app_store_id": "6451343885"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

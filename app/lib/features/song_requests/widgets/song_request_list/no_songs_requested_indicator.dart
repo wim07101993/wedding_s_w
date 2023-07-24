@@ -14,7 +14,7 @@ class NoSongsRequestedIndicator extends StatelessWidget {
           size: 48,
         ),
         const SizedBox(height: 16),
-        const Text('Er zijn nog geen liedjes prearranged'),
+        const Text('Er zijn nog geen liedjes aangevraagd'),
       ],
     );
   }
