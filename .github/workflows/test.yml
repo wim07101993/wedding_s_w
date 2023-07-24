@@ -27,6 +27,9 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         working-directory: ./app
+
+      - run: |
+          cat app/lib/firebase_options.dart
         
       - name: Verify formatting
         working-directory: ./app
