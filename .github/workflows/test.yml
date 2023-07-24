@@ -23,13 +23,12 @@ jobs:
 
       - name: Create Firebase options
         run: |
-          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+          echo "$FIREBASE_OPTIONS_DART" > app/lib/firebase_options.dart
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        working-directory: ./app
 
       - run: |
-          cat app/lib/firebase_options.dart
+          echo $(cat app/lib/firebase_options.dart)
         
       - name: Verify formatting
         working-directory: ./app
