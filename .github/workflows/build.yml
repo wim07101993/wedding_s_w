@@ -54,6 +54,13 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
 
+      - name: Create Firebase options
+        run: |
+          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: ./app
+        
       - name: Configure Google services
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
@@ -109,6 +116,13 @@ jobs:
       
       - run: flutter doctor -v
       - run: flutter pub get
+        working-directory: ./app
+        
+      - name: Create Firebase options
+        run: |
+          echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         working-directory: ./app
         
       - name: Configure Google services
@@ -186,7 +200,7 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
       
-      - name: Configure Google services
+      - name: Create Firebase options
         run: |
           echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
         env:
@@ -224,7 +238,7 @@ jobs:
       - run: flutter pub get
         working-directory: ./app
       
-      - name: Configure Google services
+      - name: Create Firebase options
         run: |
           echo "$FIREBASE_OPTIONS_DART" > lib/firebase_options.dart
         env:
