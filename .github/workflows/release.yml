@@ -9,6 +9,8 @@ on:
 jobs:
   github-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Download Android 🤖
         uses: dawidd6/action-download-artifact@v2
