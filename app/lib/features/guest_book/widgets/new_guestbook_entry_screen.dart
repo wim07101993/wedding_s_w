@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
@@ -59,8 +61,12 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
   }
 
   Future<void> takePicture() async {
-    final picker = ImagePicker();
-    final picture = await picker.pickImage(source: ImageSource.camera);
+    final takePicture = getIt.get<TakePicture>()();
+    final picture = await takePicture.thenWhen(
+      (exception) => null,
+      (picture) => picture,
+    );
+
     if (!mounted) {
       return;
     }
