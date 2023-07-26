@@ -57,4 +57,4 @@ class DefaultFirebaseOptions {
   );
 }
 
-const recaptchaKey = '6Lf5c04nAAAAAOniLgv6Dt_VFpwqQ4wnIJVLga23';
+const recaptchaKey = '6LesvlcnAAAAAMDiMu3FHQ2SO27W-5cqC45l8_jM';
