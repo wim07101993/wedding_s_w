@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.wimvanlaer.wedding_s_w"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -21,7 +21,7 @@ class _GuestbookScreenState extends State<GuestbookScreen> {
     final getIt = this.getIt;
     final entry = await getIt
         .get<AppRouter>()
-        .push<GuestbookEntry?>(const NewGuestbookEntryRoute());
+        .push<GuestbookEntry?>(const TakePictureRoute());
     if (entry == null) {
       return;
     }
