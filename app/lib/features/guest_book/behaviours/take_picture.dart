@@ -11,6 +11,9 @@ class TakePicture extends Behaviour<CameraController?, XFile?> {
   final ImagePicker imagePicker;
 
   @override
+  String get tag => 'take picture';
+
+  @override
   Future<XFile?> action(CameraController? camera, BehaviourTrack? track) {
     if (camera != null) {
       return camera.takePicture();

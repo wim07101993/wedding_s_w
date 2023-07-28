@@ -24,6 +24,9 @@ class GetGuestBookEntries
   final FirebaseStorage storage;
 
   @override
+  String get tag => 'get guestbook entries';
+
+  @override
   Future<List<GuestbookEntry>> action(
     GuestbookPageQuery input,
     BehaviourTrack? track,

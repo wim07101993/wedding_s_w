@@ -11,6 +11,9 @@ class GetGuestbookEntry extends Behaviour<String, GuestbookEntry?> {
     required this.storage,
   });
 
+  @override
+  String get tag => 'get guestbook entry';
+
   final FirebaseFirestore firestore;
   final FirebaseStorage storage;
 

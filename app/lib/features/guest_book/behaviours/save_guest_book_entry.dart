@@ -38,6 +38,9 @@ class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, GuestbookEntry> {
   final FirebaseFirestore firestore;
 
   @override
+  String get tag => 'save guestbook entry';
+
+  @override
   Future<GuestbookEntry> action(
     NewGuestbookEntry input,
     BehaviourTrack? track,

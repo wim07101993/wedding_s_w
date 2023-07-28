@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:auto_route/annotations.dart';
 import 'package:behaviour/behaviour.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
@@ -155,10 +154,7 @@ class _TakePictureScreenState extends State<TakePictureScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (Platform.isAndroid)
-                    const FlashSelector()
-                  else
-                    const SizedBox(),
+                  if (!kIsWeb) const FlashSelector() else const SizedBox(),
                   _cameraShutter(theme),
                   _cameraSelector(theme),
                 ],
