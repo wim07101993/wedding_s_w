@@ -17,7 +17,6 @@ class AppRouter extends $AppRouter {
       AutoRoute(page: NewGuestbookEntryRoute.page, path: '/guestbook/new'),
       AutoRoute(page: TakePictureRoute.page, path: '/guestbook/new/picture'),
       AutoRoute(page: SongRequestsRoute.page, path: '/song-requests'),
-      AutoRoute(page: QuizRoute.page, path: '/quiz'),
     ];
   }
 }

@@ -21,6 +21,9 @@ class GetSongRequests
   final FirebaseFirestore firestore;
 
   @override
+  String get tag => 'get song requests';
+
+  @override
   Future<List<SongRequest>> action(
     GetSongRequestsQuery input,
     BehaviourTrack? track,

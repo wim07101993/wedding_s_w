@@ -11,7 +11,11 @@ class SearchSongs extends Behaviour<String, List<SpotifySong>> {
   final SpotifyApi spotify;
 
   @override
+  String get tag => 'search song';
+
+  @override
   Future<List<SpotifySong>> action(String searchString, BehaviourTrack? track) {
+    track?.addAttribute('search-string', searchString);
     return spotify.search.get(searchString).first(10).then(
           (pages) => pages
               .tracks()

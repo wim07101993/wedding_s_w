@@ -14,6 +14,9 @@ class RequestSong extends Behaviour<SongRequest, void> {
   final FirebaseFirestore firestore;
 
   @override
+  String get tag => 'request song';
+
+  @override
   Future<void> action(SongRequest input, BehaviourTrack? track) async {
     final existingQuery = input.when<Query<SongRequest>>(
       spotifySong: (song) => firestore.songRequests
