@@ -1,6 +1,4 @@
 import 'package:behaviour/behaviour.dart';
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -13,10 +11,6 @@ import 'package:wedding_s_w/shared/dependency_management/feature.dart';
 import 'package:wedding_s_w/shared/firebase/firebase_feature.dart';
 
 typedef GuestbookPagingController = PagingController<DateTime?, GuestbookEntry>;
-typedef CameraList = List<CameraDescription>;
-typedef CameraControllerNotifier = ValueNotifier<CameraController?>;
-typedef FlashController = ValueNotifier<FlashMode>;
-typedef CameraDescriptionController = ValueNotifier<CameraDescription?>;
 
 class GuestbookFeature extends Feature {
   const GuestbookFeature();
@@ -54,10 +48,6 @@ class GuestbookFeature extends Feature {
       ),
     );
     getIt.registerLazySingleton(() => ImagePicker());
-    getIt.registerLazySingleton(
-      () => FlashController(FlashMode.auto),
-      dispose: (controller) => controller.dispose(),
-    );
     getIt.registerLazySingleton(
       () {
         final controller = GuestbookPagingController(firstPageKey: null);

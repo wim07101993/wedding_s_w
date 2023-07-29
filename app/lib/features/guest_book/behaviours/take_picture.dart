@@ -1,8 +1,7 @@
 import 'package:behaviour/behaviour.dart';
-import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 
-class TakePicture extends Behaviour<CameraController?, XFile?> {
+class TakePicture extends BehaviourWithoutInput<XFile?> {
   TakePicture({
     super.monitor,
     required this.imagePicker,
@@ -14,11 +13,7 @@ class TakePicture extends Behaviour<CameraController?, XFile?> {
   String get tag => 'take picture';
 
   @override
-  Future<XFile?> action(CameraController? camera, BehaviourTrack? track) {
-    // if (camera != null) {
-    //   return camera.takePicture();
-    // } else {
+  Future<XFile?> action(BehaviourTrack? track) {
     return imagePicker.pickImage(source: ImageSource.camera);
-    // }
   }
 }

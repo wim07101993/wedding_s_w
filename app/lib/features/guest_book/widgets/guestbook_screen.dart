@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/add_guestbook_entry_button.dart';
@@ -19,9 +21,17 @@ class GuestbookScreen extends StatefulWidget {
 class _GuestbookScreenState extends State<GuestbookScreen> {
   Future<void> onAddGuestbookEntry() async {
     final getIt = this.getIt;
+    final picture = await getIt<TakePicture>()().thenWhen(
+      (e) => null,
+      (picture) => picture,
+    );
+    if (picture == null) {
+      return;
+    }
+
     final entry = await getIt
         .get<AppRouter>()
-        .push<GuestbookEntry?>(const TakePictureRoute());
+        .push<GuestbookEntry?>(NewGuestbookEntryRoute(picture: picture));
     if (entry == null) {
       return;
     }

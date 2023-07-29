@@ -7,8 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/message_field.dart';
-import 'package:wedding_s_w/features/routing/app_router.dart';
-import 'package:wedding_s_w/features/routing/app_router.gr.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
 @RoutePage<GuestbookEntry?>()
@@ -53,60 +51,41 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (closeButtonPressed) {
-          closeButtonPressed = false;
-          return true;
-        }
-        getIt<AppRouter>().replace(const TakePictureRoute());
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            _backButton(),
-            _closeButton(),
-            if (kIsWeb)
-              Center(child: Image.network(widget.picture.path))
-            else
-              Center(child: Image.file(File(widget.picture.path))),
-            _message(),
-            if (isSaving) _savingIndicator(),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          _backButton(),
+          _closeButton(),
+          if (kIsWeb)
+            Center(child: Image.network(widget.picture.path))
+          else
+            Center(child: Image.file(File(widget.picture.path))),
+          _message(),
+          if (isSaving) _savingIndicator(),
+        ],
       ),
     );
   }
 
   Widget _backButton() {
-    return Align(
+    return const Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: BackButton(
-          color: Colors.grey,
-          onPressed: () {
-            getIt<AppRouter>().replace(const TakePictureRoute());
-          },
-        ),
+        padding: EdgeInsets.all(16),
+        child: BackButton(color: Colors.grey),
       ),
     );
   }
 
   Widget _closeButton() {
-    return Align(
+    return const Align(
       alignment: Alignment.topRight,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: CloseButton(
           color: Colors.grey,
-          onPressed: () {
-            closeButtonPressed = true;
-            getIt<AppRouter>().pop();
-          },
         ),
       ),
     );
