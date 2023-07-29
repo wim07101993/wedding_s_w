@@ -182,6 +182,7 @@ class _TakePictureScreenState extends State<TakePictureScreen>
       case Orientation.portrait:
         direction = Axis.vertical;
     }
+
     return Flex(
       direction: direction,
       children: [
