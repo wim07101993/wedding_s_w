@@ -18,9 +18,9 @@ import 'package:wedding_s_w/features/guest_book/widgets/geustbook_entry_detail_s
     as _i3;
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_screen.dart'
     as _i5;
-import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry_screen.dart'
+import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/new_guestbook_entry_screen.dart'
     as _i4;
-import 'package:wedding_s_w/features/guest_book/widgets/take_picture_screen.dart'
+import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/take_picture_screen.dart'
     as _i8;
 import 'package:wedding_s_w/features/home/widgets/home_screen.dart' as _i6;
 import 'package:wedding_s_w/features/invitation/widgets/invitation_screen.dart'

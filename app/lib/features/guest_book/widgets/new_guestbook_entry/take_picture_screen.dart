@@ -1,13 +1,11 @@
 import 'package:auto_route/annotations.dart';
-import 'package:behaviour/behaviour.dart';
-import 'package:camera/camera.dart';
+import 'package:camera/camera.dart' hide CameraPreview;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/camera_selector.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/flash_selector.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/CameraPreview.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/camera_controls.dart';
 import 'package:wedding_s_w/features/routing/app_router.dart';
 import 'package:wedding_s_w/features/routing/app_router.gr.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
@@ -90,6 +88,7 @@ class _TakePictureScreenState extends State<TakePictureScreen>
     await controller.initialize();
     if (!kIsWeb) {
       controller.setFlashMode(flashController.value);
+      controller.unlockCaptureOrientation();
     }
     setState(() => cameraController = controller);
   }
@@ -126,74 +125,104 @@ class _TakePictureScreenState extends State<TakePictureScreen>
     super.dispose();
   }
 
-  Future<void> takePicture() async {
-    final picture = await getIt<TakePicture>()(cameraController).thenWhen(
-      (exception) => null,
-      (picture) => picture,
-    );
-    if (!mounted || picture == null) {
-      return;
-    }
-    await getIt<AppRouter>().replace(NewGuestbookEntryRoute(picture: picture));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final cameraController = this.cameraController;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          const Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: CloseButton(color: Colors.grey),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [_cameraPreview()],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (kIsWeb) const SizedBox() else const FlashSelector(),
-                  _cameraShutter(theme),
-                  if (cameraDescriptionController.value == null ||
-                      cameraList.length < 2)
-                    const SizedBox()
-                  else
-                    CameraSelector(
-                      controller: cameraDescriptionController,
-                      cameras: cameraList,
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ],
+      body: OrientationBuilder(
+        builder: (context, orientation) => Stack(
+          children: [
+            if (cameraController != null) ...[
+              cameraBody(cameraController, orientation),
+              cameraControls(cameraController, orientation),
+            ] else
+              const Text('NO CAMERA'),
+            closeButton(orientation),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _cameraPreview() {
-    final controller = cameraController;
-    if (controller != null) {
-      return CameraPreview(controller);
+  Widget closeButton(Orientation orientation) {
+    late final Alignment alignment;
+    switch (orientation) {
+      case Orientation.landscape:
+        alignment = Alignment.topLeft;
+      case Orientation.portrait:
+        alignment = Alignment.topRight;
     }
-    return const Text('NO CAMERA');
+    return SafeArea(
+      child: Align(
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: CloseButton(
+            color: Colors.grey,
+            onPressed: () {
+              final router = getIt<AppRouter>();
+              if (router.canPop()) {
+                router.pop();
+              } else {
+                router.replace(const GuestbookRoute());
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget _cameraShutter(ThemeData theme) {
-    return FloatingActionButton(
-      onPressed: takePicture,
-      child: const Icon(Icons.camera_alt),
+  Widget cameraBody(CameraController controller, Orientation orientation) {
+    late final Axis direction;
+    switch (orientation) {
+      case Orientation.landscape:
+        direction = Axis.horizontal;
+      case Orientation.portrait:
+        direction = Axis.vertical;
+    }
+    return Flex(
+      direction: direction,
+      children: [
+        Center(
+          child: CameraPreview(controller: controller),
+        ),
+      ],
+    );
+  }
+
+  Widget cameraControls(
+    CameraController cameraController,
+    Orientation orientation,
+  ) {
+    late final Axis direction;
+    late final Alignment alignment;
+    late final EdgeInsets padding;
+    switch (orientation) {
+      case Orientation.landscape:
+        direction = Axis.vertical;
+        alignment = Alignment.centerRight;
+        padding = const EdgeInsets.only(right: 32);
+      case Orientation.portrait:
+        direction = Axis.horizontal;
+        alignment = Alignment.bottomCenter;
+        padding = const EdgeInsets.only(bottom: 32);
+    }
+
+    return SafeArea(
+      child: Align(
+        alignment: alignment,
+        child: Padding(
+          padding: padding,
+          child: CameraControls(
+            cameraController: cameraController,
+            cameraDescriptionController: cameraDescriptionController,
+            cameraList: cameraList,
+            direction: direction,
+          ),
+        ),
+      ),
     );
   }
 }
