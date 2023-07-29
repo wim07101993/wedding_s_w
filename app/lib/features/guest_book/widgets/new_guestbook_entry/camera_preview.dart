@@ -15,8 +15,9 @@ class CameraPreview extends StatefulWidget {
 }
 
 class _CameraPreviewState extends State<CameraPreview> {
-  double _minAvailableZoom = 1.0;
-  double _maxAvailableZoom = 1.0;
+  static const double _minAvailableZoom = 1.0;
+  static const double _maxAvailableZoom = 1.0;
+
   double _currentScale = 1.0;
   double _baseScale = 1.0;
 
