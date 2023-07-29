@@ -161,6 +161,7 @@ jobs:
     name: build web 🌐
     runs-on: ubuntu-latest
     needs: getVersion
+    if: false
     env:
       ARTIFACT_PATH: wedding_s_w/
     steps:
