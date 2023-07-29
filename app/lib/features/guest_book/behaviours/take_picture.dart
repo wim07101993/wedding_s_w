@@ -15,10 +15,10 @@ class TakePicture extends Behaviour<CameraController?, XFile?> {
 
   @override
   Future<XFile?> action(CameraController? camera, BehaviourTrack? track) {
-    if (camera != null) {
-      return camera.takePicture();
-    } else {
-      return imagePicker.pickImage(source: ImageSource.camera);
-    }
+    // if (camera != null) {
+    //   return camera.takePicture();
+    // } else {
+    return imagePicker.pickImage(source: ImageSource.camera);
+    // }
   }
 }
