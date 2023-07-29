@@ -1,11 +1,11 @@
-import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/song_requests/models/song_request.dart';
 import 'package:wedding_s_w/features/song_requests/widgets/search_bar.dart';
 import 'package:wedding_s_w/features/song_requests/widgets/song_request_list/song_request_list.dart';
+import 'package:wedding_s_w/shared/resources/fonts.dart';
+import 'package:wedding_s_w/shared/resources/images.dart';
 
-@RoutePage()
 class SongRequestsScreen extends StatefulWidget {
   const SongRequestsScreen({super.key});
 
@@ -33,17 +33,39 @@ class _SongRequestsScreenState extends State<SongRequestsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Aangevraagde liedjes')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SearchBar(onSongRequested: onRequestSong),
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Image(image: Images.homeHeader),
+              const SizedBox(height: 8),
+              Text(
+                'Wil je een liedje aanvragen?',
+                style: theme.textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              SearchBar(onSongRequested: onRequestSong),
+              const SizedBox(height: 24),
+              const Text(
+                'Aangevraagde liedjes',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontFamily: Fonts.centuryGothic,
+                  fontSize: 20,
+                ),
+              ),
+            ],
           ),
-          Expanded(child: SongRequestList(controller: pagingController)),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Expanded(child: SongRequestList(controller: pagingController)),
+      ],
     );
   }
 }

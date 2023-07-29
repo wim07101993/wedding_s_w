@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
@@ -13,20 +11,19 @@ class GuestbookEntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = getIt(context).get<GuestbookPagingController>();
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(() => controller.refresh()),
-      child: PagedListView<DateTime?, GuestbookEntry>(
-        pagingController: controller,
-        builderDelegate: PagedChildBuilderDelegate(
-          itemBuilder: (context, item, index) => Padding(
-            padding: itemPadding(
-              controller.value.itemList?.length ?? 0,
-              index,
-            ),
-            child: GuestbookEntryCard(
-              key: Key(item.id),
-              guestbookEntry: item,
-            ),
+    return PagedListView<DateTime?, GuestbookEntry>(
+      pagingController: controller,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      builderDelegate: PagedChildBuilderDelegate(
+        itemBuilder: (context, item, index) => Padding(
+          padding: itemPadding(
+            controller.value.itemList?.length ?? 0,
+            index,
+          ),
+          child: GuestbookEntryCard(
+            key: Key(item.id),
+            guestbookEntry: item,
           ),
         ),
       ),

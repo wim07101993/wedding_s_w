@@ -61,6 +61,7 @@ class _SongRequestListState extends State<SongRequestList> {
       onRefresh: () => Future.sync(widget.controller.refresh),
       child: PagedListView<DateTime?, SongRequest>(
         pagingController: widget.controller,
+        padding: EdgeInsets.zero,
         builderDelegate: PagedChildBuilderDelegate(
           noItemsFoundIndicatorBuilder: _noItemsFoundIndicator,
           itemBuilder: _buildItem,

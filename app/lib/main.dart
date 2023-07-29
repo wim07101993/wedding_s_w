@@ -5,8 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
-import 'package:wedding_s_w/features/routing/app_router.dart';
-import 'package:wedding_s_w/features/routing/routing_feature.dart';
+import 'package:wedding_s_w/features/home/widgets/home_screen.dart';
 import 'package:wedding_s_w/features/song_requests/song_requests_feature.dart';
 import 'package:wedding_s_w/shared/dependency_management/feature_manager.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
@@ -28,7 +27,6 @@ Future<void> run(GetIt getIt) async {
   final featureManager = FeatureManager(
     features: [
       const LoggingFeature(),
-      const RoutingFeature(),
       firebaseFeature,
       const GuestbookFeature(),
       const SongRequestsFeature()
@@ -62,10 +60,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Trouw Sara & Wim',
       theme: appTheme,
-      routerConfig: getIt(context).get<AppRouter>().config(),
+      home: const HomeScreen(),
     );
   }
 }

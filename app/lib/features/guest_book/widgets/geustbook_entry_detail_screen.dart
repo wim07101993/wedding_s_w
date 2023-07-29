@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -9,11 +8,10 @@ import 'package:wedding_s_w/features/guest_book/widgets/guestbook_message.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_picture.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
-@RoutePage()
 class GuestbookEntryDetailScreen extends StatelessWidget {
   const GuestbookEntryDetailScreen({
     super.key,
-    @PathParam('guestbookEntryId') required this.guestbookEntryId,
+    required this.guestbookEntryId,
   });
 
   final String guestbookEntryId;
@@ -51,7 +49,13 @@ class GuestbookEntryDetailScreen extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: GuestbookMessage(guestbookEntry: guestbookEntry),
             ),
-          )
+          ),
+        const SafeArea(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: BackButton(color: Colors.grey),
+          ),
+        ),
       ],
     );
   }

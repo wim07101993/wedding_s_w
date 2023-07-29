@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,14 +8,15 @@ import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/message_field.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
 
-@RoutePage<GuestbookEntry?>()
 class NewGuestbookEntryScreen extends StatefulWidget {
   const NewGuestbookEntryScreen({
     super.key,
     required this.picture,
+    required this.entry,
   });
 
-  final XFile picture;
+  final ValueListenable<XFile?> picture;
+  final ValueNotifier<GuestbookEntry?> entry;
 
   @override
   State<NewGuestbookEntryScreen> createState() =>
@@ -28,13 +28,13 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
   bool isSaving = false;
   bool closeButtonPressed = true;
 
-  Future<void> saveGuestbookEntry() async {
+  Future<void> saveGuestbookEntry(XFile picture) async {
     try {
       setState(() => isSaving = true);
 
       final result = await getIt<SaveGuestbookEntry>()(
         NewGuestbookEntry(
-          pictureFile: widget.picture,
+          pictureFile: picture,
           message: messageController.text,
         ),
       );
@@ -43,38 +43,39 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
         return;
       }
 
-      result.whenSuccess((newEntry) => Navigator.of(context).pop(newEntry));
+      result.whenSuccess((newEntry) => widget.entry.value = newEntry);
     } finally {
       setState(() => isSaving = false);
     }
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          _backButton(),
-          _closeButton(),
-          if (kIsWeb)
-            Center(child: Image.network(widget.picture.path))
-          else
-            Center(child: Image.file(File(widget.picture.path))),
-          _message(),
-          if (isSaving) _savingIndicator(),
-        ],
-      ),
-    );
-  }
-
-  Widget _backButton() {
-    return const Align(
-      alignment: Alignment.topLeft,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: BackButton(color: Colors.grey),
+      body: ValueListenableBuilder(
+        valueListenable: widget.picture,
+        builder: (context, picture, child) {
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              _closeButton(),
+              if (picture != null) ...[
+                if (kIsWeb)
+                  Center(child: Image.network(picture.path))
+                else
+                  Center(child: Image.file(File(picture.path))),
+                _message(picture),
+              ],
+              if (isSaving) _savingIndicator(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -91,7 +92,7 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
     );
   }
 
-  Widget _message() {
+  Widget _message(XFile picture) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
@@ -104,7 +105,7 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
             const SizedBox(width: 16),
             IconButton.filled(
               iconSize: 32,
-              onPressed: saveGuestbookEntry,
+              onPressed: () => saveGuestbookEntry(picture),
               icon: const Icon(Icons.send),
             ),
           ],
