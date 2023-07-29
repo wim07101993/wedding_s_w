@@ -75,4 +75,7 @@ class GuestbookFeature extends Feature {
       dispose: (controller) => controller.dispose(),
     );
   }
+
+  @override
+  String toString() => 'guestbook feature';
 }

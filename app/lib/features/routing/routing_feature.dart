@@ -9,4 +9,7 @@ class RoutingFeature extends Feature {
   void registerTypes(GetIt getIt) {
     getIt.registerLazySingleton(() => AppRouter());
   }
+
+  @override
+  String toString() => 'routing feature';
 }
