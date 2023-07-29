@@ -13,46 +13,33 @@ class FlashSelector extends StatefulWidget {
 class _FlashSelectorState extends State<FlashSelector>
     with SingleTickerProviderStateMixin {
   late final flashController = getIt<FlashController>();
-  late final AnimationController _flashModeControlRowAnimationController;
-  late final Animation<double> _flashModeControlRowAnimation;
+  late final AnimationController _flashModeSelectionAnimationController;
+  late final Animation<double> _flashModeSelectionAnimation;
 
   @override
   void initState() {
     super.initState();
-    _flashModeControlRowAnimationController = AnimationController(
+    _flashModeSelectionAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _flashModeControlRowAnimation = CurvedAnimation(
-      parent: _flashModeControlRowAnimationController,
+    _flashModeSelectionAnimation = CurvedAnimation(
+      parent: _flashModeSelectionAnimationController,
       curve: Curves.easeInCubic,
     );
   }
 
   @override
   void dispose() {
-    _flashModeControlRowAnimationController.dispose();
+    _flashModeSelectionAnimationController.dispose();
     super.dispose();
   }
 
-  IconData getIconForFlashMode(FlashMode flashMode) {
-    switch (flashMode) {
-      case FlashMode.auto:
-        return Icons.flash_auto;
-      case FlashMode.always:
-        return Icons.flash_on;
-      case FlashMode.off:
-        return Icons.flash_off;
-      case FlashMode.torch:
-        return Icons.highlight;
-    }
-  }
-
   void onFlashModeButtonPressed() {
-    if (_flashModeControlRowAnimationController.value == 1) {
-      _flashModeControlRowAnimationController.reverse();
+    if (_flashModeSelectionAnimationController.value == 1) {
+      _flashModeSelectionAnimationController.reverse();
     } else {
-      _flashModeControlRowAnimationController.forward();
+      _flashModeSelectionAnimationController.forward();
     }
   }
 
@@ -69,11 +56,11 @@ class _FlashSelectorState extends State<FlashSelector>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _flashModeControlOptions(theme),
+            _flashModeOptinos(theme),
             IconButton(
               onPressed: onFlashModeButtonPressed,
               color: theme.primaryColor,
-              icon: Icon(getIconForFlashMode(flashMode)),
+              icon: Icon(flashMode.icon),
             ),
           ],
         ),
@@ -81,28 +68,43 @@ class _FlashSelectorState extends State<FlashSelector>
     );
   }
 
-  Widget _flashModeControlOptions(ThemeData theme) {
+  Widget _flashModeOptinos(ThemeData theme) {
     final currentMode = flashController.value;
     return SizeTransition(
-      sizeFactor: _flashModeControlRowAnimation,
+      sizeFactor: _flashModeSelectionAnimation,
       child: ClipRect(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            for (final flashMode in FlashMode.values
-                .where((value) => value != flashController.value))
+            for (final flashMode
+                in FlashMode.values.where((mode) => mode != currentMode))
               IconButton(
-                icon: Icon(getIconForFlashMode(flashMode)),
+                icon: Icon(flashMode.icon),
                 color: currentMode == flashMode ? theme.primaryColor : null,
                 onPressed: () {
                   flashController.value = flashMode;
-                  _flashModeControlRowAnimationController.reverse();
+                  _flashModeSelectionAnimationController.reverse();
                 },
               )
           ],
         ),
       ),
     );
+  }
+}
+
+extension FlashModeExtensions on FlashMode {
+  IconData get icon {
+    switch (this) {
+      case FlashMode.auto:
+        return Icons.flash_auto;
+      case FlashMode.always:
+        return Icons.flash_on;
+      case FlashMode.off:
+        return Icons.flash_off;
+      case FlashMode.torch:
+        return Icons.highlight;
+    }
   }
 }

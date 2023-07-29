@@ -32,4 +32,7 @@ class SongRequestsFeature extends Feature {
       () => GetSongRequests(monitor: getIt(), firestore: getIt()),
     );
   }
+
+  @override
+  String toString() => 'song request feature';
 }

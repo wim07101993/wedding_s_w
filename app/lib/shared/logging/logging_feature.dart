@@ -57,6 +57,9 @@ class LoggingFeature extends Feature {
     Logger.root.level = Level.ALL;
     return super.install(getIt);
   }
+
+  @override
+  String toString() => 'logging feature';
 }
 
 extension LoggingGetItExtensions on GetIt {

@@ -28,7 +28,7 @@ class FeatureManager {
     return _logger ??
         (!getIt.isRegistered<Logger>()
             ? null
-            : _logger = getIt.logger<FeatureManager>());
+            : _logger = getIt.logger('feature manager'));
   }
 
   void registerTypes() {

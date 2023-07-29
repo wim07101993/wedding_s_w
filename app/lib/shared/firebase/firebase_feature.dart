@@ -21,7 +21,9 @@ class FirebaseFeature extends Feature {
   void registerTypes(GetIt getIt) {
     getIt.registerLazySingleton(() => FirebaseFirestore.instance);
     getIt.registerLazySingleton(() => FirebaseStorage.instance);
-    getIt.registerLazySingleton(() => FirebaseCrashlytics.instance);
+    if (kIsWeb) {
+      getIt.registerLazySingleton(() => FirebaseCrashlytics.instance);
+    }
     getIt.registerLazySingleton(() => FirebaseRemoteConfig.instance);
     getIt.registerLazySingleton(
       () => RemoteConfigGlobalValue(
@@ -47,4 +49,7 @@ class FirebaseFeature extends Feature {
     await getIt<RemoteConfigGlobalValue>().initialize();
     isInstalled = true;
   }
+
+  @override
+  String toString() => 'firebase feature';
 }

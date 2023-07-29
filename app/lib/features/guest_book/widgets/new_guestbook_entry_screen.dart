@@ -28,6 +28,7 @@ class NewGuestbookEntryScreen extends StatefulWidget {
 class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
   late final messageController = TextEditingController();
   bool isSaving = false;
+  bool closeButtonPressed = true;
 
   Future<void> saveGuestbookEntry() async {
     try {
@@ -53,61 +54,92 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
+        if (closeButtonPressed) {
+          closeButtonPressed = false;
+          return true;
+        }
         getIt<AppRouter>().replace(const TakePictureRoute());
-        return Future.value(false);
+        return false;
       },
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
           fit: StackFit.expand,
           children: [
-            const Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CloseButton(color: Colors.grey),
-              ),
-            ),
+            _backButton(),
+            _closeButton(),
             if (kIsWeb)
               Center(child: Image.network(widget.picture.path))
             else
               Center(child: Image.file(File(widget.picture.path))),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: _message(),
-              ),
-            ),
-            if (isSaving) ...[
-              const ColoredBox(color: Colors.black54),
-              const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(child: CircularProgressIndicator()),
-                  SizedBox(height: 8),
-                  Text('Opslaan', style: TextStyle(color: Colors.white70)),
-                ],
-              ),
-            ],
+            _message(),
+            if (isSaving) _savingIndicator(),
           ],
         ),
       ),
     );
   }
 
+  Widget _backButton() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: BackButton(
+          color: Colors.grey,
+          onPressed: () {
+            getIt<AppRouter>().replace(const TakePictureRoute());
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _closeButton() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: CloseButton(
+          color: Colors.grey,
+          onPressed: () {
+            closeButtonPressed = true;
+            getIt<AppRouter>().pop();
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _message() {
-    return Row(
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: MessageField(controller: messageController),
+            ),
+            const SizedBox(width: 16),
+            IconButton.filled(
+              onPressed: saveGuestbookEntry,
+              icon: const Icon(Icons.send, size: 32),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _savingIndicator() {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: MessageField(controller: messageController),
-        ),
-        const SizedBox(width: 16),
-        IconButton.filled(
-          onPressed: saveGuestbookEntry,
-          icon: const Icon(Icons.send, size: 32),
-        ),
+        Center(child: CircularProgressIndicator()),
+        SizedBox(height: 8),
+        Text('Opslaan', style: TextStyle(color: Colors.white70)),
       ],
     );
   }

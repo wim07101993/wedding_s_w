@@ -47,7 +47,8 @@ Future<void> run(GetIt getIt) async {
 }
 
 void onError(GetIt getIt, dynamic error, StackTrace stack) {
-  if (firebaseFeature.isInstalled) {
+  if (firebaseFeature.isInstalled &&
+      getIt.isRegistered<FirebaseCrashlytics>()) {
     getIt<FirebaseCrashlytics>().recordError(error, stack);
   } else {
     log('ERROR: $error at $stack');

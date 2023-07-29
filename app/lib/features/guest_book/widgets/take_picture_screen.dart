@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/camera_dialog_content.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/camera_selector.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/flash_selector.dart';
 import 'package:wedding_s_w/features/routing/app_router.dart';
 import 'package:wedding_s_w/features/routing/app_router.gr.dart';
@@ -24,28 +24,12 @@ class TakePictureScreen extends StatefulWidget {
 
 class _TakePictureScreenState extends State<TakePictureScreen>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  late final flashController = getIt<FlashController>();
+  final cameraDescriptionController = CameraDescriptionController(null);
   final CameraList cameraList = [];
 
+  late final flashController = getIt<FlashController>();
+
   bool hasLoadedCamera = false;
-
-  set selectedCamera(CameraDescription? value) {
-    final cameraController = this.cameraController;
-    if (cameraController == null && value == null) {
-      return;
-    }
-    if (cameraController != null && value != null) {
-      cameraController.setDescription(value);
-      setState(() {});
-      return;
-    }
-    if (value != null) {
-      initCameraController(value);
-      return;
-    }
-  }
-
-  CameraDescription? get selectedCamera => cameraController?.description;
 
   CameraController? cameraController;
 
@@ -53,6 +37,8 @@ class _TakePictureScreenState extends State<TakePictureScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    cameraDescriptionController
+        .addListener(updateCameraDescriptionOfController);
     availableCameras().then(
       (cameras) {
         cameraList.addAll(cameras);
@@ -64,16 +50,35 @@ class _TakePictureScreenState extends State<TakePictureScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    flashController.addListener(onFlashModeChanged);
+    if (!kIsWeb) {
+      flashController.addListener(onFlashModeChanged);
+    }
   }
 
   void selectDefaultCamera() {
     final cameras = cameraList;
     final camera = cameras.firstOrNull;
-    if (camera == null || selectedCamera != null) {
+    if (camera == null || cameraDescriptionController.value != null) {
       return;
     }
-    selectedCamera = camera;
+    cameraDescriptionController.value = camera;
+  }
+
+  void updateCameraDescriptionOfController() {
+    final cameraDescription = cameraDescriptionController.value;
+    final cameraController = this.cameraController;
+    if (cameraController == null && cameraDescription == null) {
+      return;
+    }
+    if (cameraController != null && cameraDescription != null) {
+      cameraController.setDescription(cameraDescription);
+      setState(() {});
+      return;
+    }
+    if (cameraDescription != null) {
+      initCameraController(cameraDescription);
+      return;
+    }
   }
 
   Future<void> initCameraController(CameraDescription camera) async {
@@ -83,13 +88,15 @@ class _TakePictureScreenState extends State<TakePictureScreen>
       enableAudio: false,
     );
     await controller.initialize();
-    controller.setFlashMode(flashController.value);
+    if (!kIsWeb) {
+      controller.setFlashMode(flashController.value);
+    }
     setState(() => cameraController = controller);
   }
 
   void onFlashModeChanged() {
     final cameraController = this.cameraController;
-    if (cameraController != null) {
+    if (!kIsWeb && cameraController != null) {
       cameraController.setFlashMode(flashController.value);
     }
   }
@@ -106,13 +113,15 @@ class _TakePictureScreenState extends State<TakePictureScreen>
     if (state == AppLifecycleState.inactive) {
       cameraController.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      selectedCamera = cameraController.description;
+      cameraDescriptionController.value = cameraController.description;
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    cameraDescriptionController
+        .removeListener(updateCameraDescriptionOfController);
     cameraController?.dispose();
     super.dispose();
   }
@@ -154,9 +163,16 @@ class _TakePictureScreenState extends State<TakePictureScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (!kIsWeb) const FlashSelector() else const SizedBox(),
+                  if (kIsWeb) const SizedBox() else const FlashSelector(),
                   _cameraShutter(theme),
-                  _cameraSelector(theme),
+                  if (cameraDescriptionController.value == null ||
+                      cameraList.length < 2)
+                    const SizedBox()
+                  else
+                    CameraSelector(
+                      controller: cameraDescriptionController,
+                      cameras: cameraList,
+                    ),
                 ],
               ),
             ),
@@ -178,31 +194,6 @@ class _TakePictureScreenState extends State<TakePictureScreen>
     return FloatingActionButton(
       onPressed: takePicture,
       child: const Icon(Icons.camera_alt),
-    );
-  }
-
-  Widget _cameraSelector(ThemeData theme) {
-    final cameraList = this.cameraList;
-    final camera = selectedCamera;
-    if (camera == null || cameraList.length < 2) {
-      return Container();
-    }
-    return IconButton(
-      onPressed: openCameraDialog,
-      color: theme.primaryColor,
-      icon: Icon(getCameraLensIcon(camera.lensDirection)),
-    );
-  }
-
-  Future<void> openCameraDialog() async {
-    selectedCamera = await showDialog<CameraDescription?>(
-      context: context,
-      builder: (context) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: CameraDialogContent(cameraList: cameraList),
-        ),
-      ),
     );
   }
 }
