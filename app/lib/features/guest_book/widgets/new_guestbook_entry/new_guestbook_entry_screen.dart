@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/message_field.dart';
+import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/message_field.dart';
 import 'package:wedding_s_w/features/routing/app_router.dart';
 import 'package:wedding_s_w/features/routing/app_router.gr.dart';
 import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
