@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wedding_s_w/firebase_options.dart';
 import 'package:wedding_s_w/shared/dependency_management/feature.dart';
+import 'package:wedding_s_w/shared/firebase/remote_config_global_value.dart';
+import 'package:wedding_s_w/shared/logging/logging_feature.dart';
 
 class FirebaseFeature extends Feature {
   FirebaseFeature();
@@ -23,13 +25,13 @@ class FirebaseFeature extends Feature {
       getIt.registerLazySingleton(() => FirebaseCrashlytics.instance);
     }
     getIt.registerLazySingleton(() => FirebaseRemoteConfig.instance);
-    // getIt.registerLazySingleton(
-    //   () => RemoteConfigGlobalValue(
-    //     firebaseRemoteConfig: getIt(),
-    //     logger: getIt.logger<RemoteConfigGlobalValue>(),
-    //   ),
-    //   dispose: (value) => value.dispose(),
-    // );
+    getIt.registerLazySingleton(
+      () => RemoteConfigGlobalValue(
+        firebaseRemoteConfig: getIt(),
+        logger: getIt.logger<RemoteConfigGlobalValue>(),
+      ),
+      dispose: (value) => value.dispose(),
+    );
   }
 
   @override

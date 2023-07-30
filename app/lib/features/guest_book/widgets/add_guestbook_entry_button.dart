@@ -9,7 +9,7 @@ class AddGuestbookEntryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: onTap,
-      label: const Text('Iets in het gastenboek schrijven'),
+      label: const Text('Een foto toevoegen aan het gastenboek'),
     );
   }
 }

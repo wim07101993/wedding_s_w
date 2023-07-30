@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen>
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.photo_album),
-            label: 'gastenbook',
+            label: 'gastenboek',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.music_note),
