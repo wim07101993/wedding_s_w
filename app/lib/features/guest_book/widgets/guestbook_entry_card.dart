@@ -28,8 +28,12 @@ class GuestbookEntryCard extends StatelessWidget {
             ),
           ),
         ),
-        child: SizedBox(
-          height: 400,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 400,
+            minHeight: 400,
+            maxHeight: 400,
+          ),
           child: heroWidget(false),
         ),
       ),

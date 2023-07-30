@@ -44,14 +44,10 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
       }
 
       result.whenSuccess((newEntry) => widget.entry.value = newEntry);
+      Navigator.pop(context);
     } finally {
       setState(() => isSaving = false);
     }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
   }
 
   @override
@@ -60,22 +56,20 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
       backgroundColor: Colors.black,
       body: ValueListenableBuilder(
         valueListenable: widget.picture,
-        builder: (context, picture, child) {
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              _closeButton(),
-              if (picture != null) ...[
-                if (kIsWeb)
-                  Center(child: Image.network(picture.path))
-                else
-                  Center(child: Image.file(File(picture.path))),
-                _message(picture),
-              ],
-              if (isSaving) _savingIndicator(),
+        builder: (context, picture, child) => Stack(
+          fit: StackFit.expand,
+          children: [
+            _closeButton(),
+            if (picture != null) ...[
+              if (kIsWeb)
+                Center(child: Image.network(picture.path))
+              else
+                Center(child: Image.file(File(picture.path))),
+              _message(picture),
             ],
-          );
-        },
+            if (isSaving) _savingIndicator(),
+          ],
+        ),
       ),
     );
   }
