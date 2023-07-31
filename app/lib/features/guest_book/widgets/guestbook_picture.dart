@@ -16,20 +16,26 @@ class GuestbookPicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uri = guestbookEntry.pictureUri;
-    return Stack(
-      fit: StackFit.passthrough,
+    return canResize
+        ? PhotoView(
+            imageProvider: CachedNetworkImageProvider(uri),
+            loadingBuilder: (context, e) => _loadingIndicator(),
+          )
+        : CachedNetworkImage(
+            imageUrl: uri,
+            fit: BoxFit.fitWidth,
+            placeholder: (context, _) => _loadingIndicator(),
+          );
+  }
+
+  Widget _loadingIndicator() {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Center(
-          child: SizedBox(
-            height: 80,
-            width: 80,
-            child: CircularProgressIndicator(),
-          ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(),
         ),
-        if (canResize)
-          PhotoView(imageProvider: CachedNetworkImageProvider(uri))
-        else
-          CachedNetworkImage(imageUrl: uri, fit: BoxFit.fitWidth)
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/geustbook_entry_detail_screen.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/guestbook_message.dart';
 import 'package:wedding_s_w/features/guest_book/widgets/guestbook_picture.dart';
 
 class GuestbookEntryCard extends StatelessWidget {
@@ -14,6 +13,7 @@ class GuestbookEntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       elevation: 1,
       clipBehavior: Clip.antiAlias,
@@ -28,13 +28,15 @@ class GuestbookEntryCard extends StatelessWidget {
             ),
           ),
         ),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 400,
-            minHeight: 400,
-            maxHeight: 400,
-          ),
-          child: heroWidget(false),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
+              child: heroWidget(false),
+            ),
+            if (guestbookEntry.message.isNotEmpty) message(theme),
+          ],
         ),
       ),
     );
@@ -45,25 +47,25 @@ class GuestbookEntryCard extends StatelessWidget {
   }
 
   Widget heroWidget(bool canResizeImage) {
-    return Stack(
-      fit: StackFit.passthrough,
-      children: [
-        Hero(
-          tag: 'guestbookentry_${guestbookEntry.id}',
-          child: GuestbookPicture(
-            guestbookEntry: guestbookEntry,
-            canResize: canResizeImage,
-          ),
-        ),
-        if (guestbookEntry.message.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: GuestbookMessage(guestbookEntry: guestbookEntry),
-            ),
-          )
-      ],
+    return Hero(
+      tag: 'guestbookentry_${guestbookEntry.id}',
+      child: GuestbookPicture(
+        guestbookEntry: guestbookEntry,
+        canResize: canResizeImage,
+      ),
+    );
+  }
+
+  Widget message(ThemeData theme) {
+    return Container(
+      color: theme.colorScheme.secondary.withAlpha(180),
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        guestbookEntry.message,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: theme.colorScheme.onSecondary),
+      ),
     );
   }
 }

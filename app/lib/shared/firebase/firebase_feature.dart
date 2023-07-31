@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -25,6 +26,7 @@ class FirebaseFeature extends Feature {
       getIt.registerLazySingleton(() => FirebaseCrashlytics.instance);
     }
     getIt.registerLazySingleton(() => FirebaseRemoteConfig.instance);
+    getIt.registerLazySingleton(() => FirebaseAuth.instance);
     getIt.registerLazySingleton(
       () => RemoteConfigGlobalValue(
         firebaseRemoteConfig: getIt(),
@@ -46,7 +48,8 @@ class FirebaseFeature extends Feature {
       appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.appAttest,
       webRecaptchaSiteKey: recaptchaKey,
     );
-    // await getIt<RemoteConfigGlobalValue>().initialize();
+    await getIt<FirebaseAuth>().signInAnonymously();
+    await getIt<RemoteConfigGlobalValue>().initialize();
     isInstalled = true;
   }
 
