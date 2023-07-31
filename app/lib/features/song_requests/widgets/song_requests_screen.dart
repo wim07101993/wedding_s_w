@@ -37,13 +37,13 @@ class _SongRequestsScreenState extends State<SongRequestsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        const Image(image: Images.homeHeader),
+        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Image(image: Images.homeHeader),
-              const SizedBox(height: 8),
               Text(
                 'Wil je een liedje aanvragen?',
                 style: theme.textTheme.titleLarge,
