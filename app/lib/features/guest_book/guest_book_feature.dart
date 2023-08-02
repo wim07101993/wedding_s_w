@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guest_book_entries.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/get_guestbook_entry.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guest_book/behaviours/share_picture.dart';
 import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
 import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
 import 'package:wedding_s_w/shared/dependency_management/feature.dart';
@@ -45,6 +46,11 @@ class GuestbookFeature extends Feature {
       () => TakePicture(
         monitor: getIt(),
         imagePicker: getIt(),
+      ),
+    );
+    getIt.registerFactory(
+      () => SharePicture(
+        monitor: getIt(),
       ),
     );
     getIt.registerLazySingleton(() => ImagePicker());
