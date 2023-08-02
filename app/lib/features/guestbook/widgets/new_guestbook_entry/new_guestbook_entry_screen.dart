@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared/dependency_management.dart';
 import 'package:shared/guestbook.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/message_field.dart';
+import 'package:wedding_s_w/features/guestbook/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guestbook/widgets/new_guestbook_entry/message_field.dart';
 
 class NewGuestbookEntryScreen extends StatefulWidget {
   const NewGuestbookEntryScreen({

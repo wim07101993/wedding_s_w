@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared/dependency_management.dart';
 import 'package:shared/guestbook.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/add_guestbook_entry_button.dart';
-import 'package:wedding_s_w/features/guest_book/widgets/new_guestbook_entry/new_guestbook_entry_screen.dart';
+import 'package:wedding_s_w/features/guestbook/behaviours/take_picture.dart';
+import 'package:wedding_s_w/features/guestbook/widgets/add_guestbook_entry_button.dart';
+import 'package:wedding_s_w/features/guestbook/widgets/guestbook_entry_list.dart';
+import 'package:wedding_s_w/features/guestbook/widgets/new_guestbook_entry/new_guestbook_entry_screen.dart';
 
 class GuestbookScreen extends StatefulWidget {
   const GuestbookScreen({super.key});

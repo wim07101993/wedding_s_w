@@ -9,7 +9,7 @@ import 'package:shared/firebase.dart';
 import 'package:shared/logging.dart';
 import 'package:shared/song_requests.dart';
 import 'package:shared/theme/theme.dart';
-import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
+import 'package:wedding_s_w/features/guestbook/guest_book_feature.dart';
 import 'package:wedding_s_w/features/home/widgets/home_screen.dart';
 import 'package:wedding_s_w/firebase_options.dart';
 

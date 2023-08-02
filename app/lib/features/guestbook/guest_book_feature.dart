@@ -2,8 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared/guestbook.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/save_guest_book_entry.dart';
-import 'package:wedding_s_w/features/guest_book/behaviours/take_picture.dart';
+import 'package:wedding_s_w/features/guestbook/behaviours/save_guest_book_entry.dart';
+import 'package:wedding_s_w/features/guestbook/behaviours/take_picture.dart';
 
 typedef GuestbookPagingController = PagingController<DateTime?, GuestbookEntry>;
 

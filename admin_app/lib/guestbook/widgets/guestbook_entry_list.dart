@@ -1,9 +1,8 @@
+import 'package:admin_app/guestbook/widgets/guestbook_entry_with_delete_button.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:shared/src/dependency_management/get_it_provider.dart';
-import 'package:shared/src/guestbook/models/guestbook_entry.dart';
-import 'package:shared/src/guestbook/shared_guest_book_feature.dart';
-import 'package:shared/src/guestbook/widgets/guestbook_entry_card.dart';
+import 'package:shared/dependency_management.dart';
+import 'package:shared/guestbook.dart';
 
 class GuestbookEntryList extends StatelessWidget {
   const GuestbookEntryList({super.key});
@@ -16,15 +15,12 @@ class GuestbookEntryList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, item, index) => Padding(
+        itemBuilder: (context, entry, index) => Padding(
           padding: itemPadding(
             controller.value.itemList?.length ?? 0,
             index,
           ),
-          child: GuestbookEntryCard(
-            key: Key(item.id),
-            guestbookEntry: item,
-          ),
+          child: GuestbookEntryWithDeleteButton(entry: entry),
         ),
       ),
     );
