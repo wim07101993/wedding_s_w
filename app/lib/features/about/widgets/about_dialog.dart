@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared/resources/images.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wedding_s_w/shared/resources/images.dart';
 
 void showAppAboutDialog(BuildContext context) {
   showAboutDialog(

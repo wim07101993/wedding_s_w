@@ -1,7 +1,6 @@
 name: shared
 description: Shared library between the admin app and user app
 version: 0.0.1
-homepage:
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -10,8 +9,10 @@ environment:
 dependencies:
   auto_route: '>=7.0.0 <8.0.0'
   behaviour: '>=2.0.0 <3.0.0'
+  cached_network_image: '>=3.0.0 <4.0.0'
   cloud_firestore: '>=4.0.0 <5.0.0'
   firebase_app_check: '>=0.0.0 <1.0.0'
+  firebase_auth: '>=4.0.0 <5.0.0'
   firebase_core: '>=2.0.0 <3.0.0'
   firebase_crashlytics: '>=3.0.0 <4.0.0'
   firebase_remote_config: '>=4.0.0 <5.0.0'
@@ -23,7 +24,10 @@ dependencies:
   infinite_scroll_pagination: '>=3.0.0 <4.0.0'
   path_provider: '>=2.0.0 <3.0.0'
   photo_view: '>=0.0.0 <1.0.0'
+  share_plus: '>=7.0.0 <8.0.0'
   spotify: '>=0.0.0 <1.0.0'
+  url_launcher: '>=6.0.0 <7.0.0'
+  uuid: '>=3.0.0 <4.0.0'
 
 dev_dependencies:
   auto_route_generator: '>=7.0.0 <8.0.0'

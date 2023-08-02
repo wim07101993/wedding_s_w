@@ -6,9 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wedding_s_w/features/guest_book/firebase_firestore_extensions.dart';
-import 'package:wedding_s_w/features/guest_book/firebase_storage_extensions.dart';
-import 'package:wedding_s_w/features/guest_book/models/guestbook_entry.dart';
+import 'package:shared/guestbook.dart';
 
 class NewGuestbookEntry extends ChangeNotifier {
   NewGuestbookEntry({
