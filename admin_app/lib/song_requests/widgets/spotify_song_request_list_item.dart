@@ -4,19 +4,37 @@ import 'package:shared/dependency_management.dart';
 import 'package:shared/song_requests.dart';
 import 'package:shared/string_extensions.dart';
 
-class SpotifySongRequestListItem extends StatelessWidget {
+class SpotifySongRequestListItem extends StatefulWidget {
   const SpotifySongRequestListItem({
     super.key,
     required this.song,
-    this.onTap,
   });
 
   final SpotifySong song;
-  final VoidCallback? onTap;
+
+  @override
+  State<SpotifySongRequestListItem> createState() =>
+      _SpotifySongRequestListItemState();
+}
+
+class _SpotifySongRequestListItemState
+    extends State<SpotifySongRequestListItem> {
+  bool isDeleting = false;
+
+  Future<void> deleteItem() async {
+    setState(() => isDeleting = true);
+    try {
+      await getIt<RemoveSongRequest>()(widget.song);
+    } finally {
+      if (mounted) {
+        setState(() => isDeleting = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final song = this.song;
+    final song = widget.song;
     final title = song.title;
     final artists = song.artists.join(', ').nullIfEmpty;
     final album = song.albumName;
@@ -28,7 +46,6 @@ class SpotifySongRequestListItem extends StatelessWidget {
 
     final theme = Theme.of(context);
     return ListTile(
-      onTap: onTap,
       tileColor: theme.cardColor,
       leading: albumCoverUrl != null ? _albumCoverUrl(albumCoverUrl) : null,
       title: Text(
@@ -37,7 +54,7 @@ class SpotifySongRequestListItem extends StatelessWidget {
       ),
       subtitle: subtitle == null ? null : Text(subtitle),
       trailing: IconButton(
-        onPressed: () => getIt(context).get<RemoveSongRequest>()(song),
+        onPressed: deleteItem,
         icon: const Icon(Icons.delete),
       ),
     );

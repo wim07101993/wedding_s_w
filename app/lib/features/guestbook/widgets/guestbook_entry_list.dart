@@ -13,6 +13,7 @@ class GuestbookEntryList extends StatelessWidget {
       pagingController: controller,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       builderDelegate: PagedChildBuilderDelegate(
         itemBuilder: (context, item, index) => Padding(
           padding: itemPadding(

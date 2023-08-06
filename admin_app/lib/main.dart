@@ -3,15 +3,16 @@ import 'dart:developer';
 
 import 'package:admin_app/firebase_options.dart';
 import 'package:admin_app/guestbook/guestbook_feature.dart';
-import 'package:admin_app/home/widgets/home_screen.dart';
+import 'package:admin_app/guestbook/widgets/guestbook_screen.dart';
 import 'package:admin_app/song_requests/song_requests_feature.dart';
+import 'package:admin_app/song_requests/widgets/song_requests_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared/dependency_management.dart';
 import 'package:shared/firebase.dart';
+import 'package:shared/home.dart';
 import 'package:shared/logging.dart';
-import 'package:shared/song_requests.dart';
 import 'package:shared/theme/theme.dart';
 
 final firebaseFeature = FirebaseFeature(
@@ -33,7 +34,7 @@ Future<void> run(GetIt getIt) async {
       const LoggingFeature(),
       firebaseFeature,
       const GuestbookFeature(),
-      const SongRequestsFeature()
+      SongRequestsFeature()
     ],
     getIt: getIt,
   )..registerTypes();
@@ -67,7 +68,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Trouw Sara & Wim',
       theme: appTheme,
-      home: const HomeScreen(),
+      home: const HomeScreen(
+        guestbook: GuestbookScreen(),
+        songRequests: SongRequestsScreen(),
+      ),
     );
   }
 }

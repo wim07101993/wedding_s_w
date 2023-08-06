@@ -65,6 +65,8 @@ class _GuestbookScreenState extends State<GuestbookScreen> {
         child: const SingleChildScrollView(
           child: Column(
             children: [
+              SafeArea(child: SizedBox()),
+              SizedBox(height: 8),
               GuestbookHeader(),
               GuestbookEntryList(),
             ],

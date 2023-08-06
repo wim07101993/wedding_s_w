@@ -7,4 +7,3 @@ export 'src/song_requests/shared_song_requests_feature.dart';
 export 'src/song_requests/widgets/search_bar.dart';
 export 'src/song_requests/widgets/song_request_list/no_songs_requested_indicator.dart';
 export 'src/song_requests/widgets/song_request_list/song_request_list.dart';
-export 'src/song_requests/widgets/song_requests_screen.dart';
