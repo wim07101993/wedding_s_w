@@ -4,16 +4,19 @@ import 'dart:developer';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wedding_s_w/features/guest_book/guest_book_feature.dart';
+import 'package:shared/dependency_management.dart';
+import 'package:shared/firebase.dart';
+import 'package:shared/logging.dart';
+import 'package:shared/song_requests.dart';
+import 'package:shared/theme/theme.dart';
+import 'package:wedding_s_w/features/guestbook/guest_book_feature.dart';
 import 'package:wedding_s_w/features/home/widgets/home_screen.dart';
-import 'package:wedding_s_w/features/song_requests/song_requests_feature.dart';
-import 'package:wedding_s_w/shared/dependency_management/feature_manager.dart';
-import 'package:wedding_s_w/shared/dependency_management/get_it_provider.dart';
-import 'package:wedding_s_w/shared/firebase/firebase_feature.dart';
-import 'package:wedding_s_w/shared/logging/logging_feature.dart';
-import 'package:wedding_s_w/shared/theme/theme.dart';
+import 'package:wedding_s_w/firebase_options.dart';
 
-final firebaseFeature = FirebaseFeature();
+final firebaseFeature = FirebaseFeature(
+  firebaseOptions: DefaultFirebaseOptions.currentPlatform,
+  recaptchaKey: recaptchaKey,
+);
 
 Future<void> main() async {
   final getIt = GetIt.asNewInstance();
@@ -29,7 +32,7 @@ Future<void> run(GetIt getIt) async {
       const LoggingFeature(),
       firebaseFeature,
       const GuestbookFeature(),
-      const SongRequestsFeature()
+      const SharedSongRequestsFeature()
     ],
     getIt: getIt,
   )..registerTypes();

@@ -11,7 +11,7 @@ const _colors = ColorScheme(
   onSecondary: Colors.white,
   error: Color(0xFFD53A47),
   onError: Colors.white,
-  background: Colors.transparent,
+  background: Colors.white,
   onBackground: Colors.black,
   surface: Colors.white,
   onSurface: Colors.black,
@@ -38,6 +38,11 @@ final appTheme = ThemeData(
       fontWeight: FontWeight.bold,
       color: _colors.primary,
     ),
+    titleLarge: TextStyle(
+      fontFamily: Fonts.playfairDisplay,
+      fontSize: 24,
+      color: _colors.secondary,
+    ),
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: _colors.primary,
@@ -46,6 +51,9 @@ final appTheme = ThemeData(
     backgroundColor: _colors.primary.withOpacity(0.6),
     labelStyle: TextStyle(color: _colors.onPrimary),
     side: BorderSide.none,
+  ),
+  dialogTheme: const DialogTheme(
+    backgroundColor: Colors.white,
   ),
   scaffoldBackgroundColor: Colors.white,
 );
