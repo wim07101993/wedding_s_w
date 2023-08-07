@@ -3,8 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:shared/song_requests.dart';
 
 class SongRequestsFeature extends SharedSongRequestsFeature {
-  const SongRequestsFeature();
-
   @override
   void registerTypes(GetIt getIt) {
     super.registerTypes(getIt);

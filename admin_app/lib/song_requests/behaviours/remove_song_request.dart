@@ -10,7 +10,7 @@ class RemoveSongRequest extends Behaviour<SongRequest, void> {
   });
 
   final FirebaseFirestore firestore;
-  final SongRequestPagingController songRequestPagingController;
+  final SongRequestController songRequestPagingController;
 
   @override
   Future<void> action(SongRequest input, BehaviourTrack? track) async {
@@ -25,8 +25,5 @@ class RemoveSongRequest extends Behaviour<SongRequest, void> {
 
     final snapshot = await query.get();
     await Future.wait(snapshot.docs.map((doc) => doc.reference.delete()));
-
-    songRequestPagingController.itemList =
-        songRequestPagingController.itemList?.toList()?..remove(input);
   }
 }

@@ -45,6 +45,11 @@ class FreeInputSongRequest implements SongRequest {
     return freeInputSongRequest(this);
   }
 
+  @override
+  String toString() {
+    return 'FreeInputSongRequest($timestamp, $input)';
+  }
+
   static const String typeName = 'FreeInputSongRequest';
   static const String inputFieldName = 'input';
   static const String inputToLowerFieldName = 'inputToLower';

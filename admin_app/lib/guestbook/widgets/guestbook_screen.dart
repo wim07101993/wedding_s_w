@@ -9,16 +9,16 @@ class GuestbookScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = getIt(context).get<GuestbookPagingController>();
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () => Future.sync(controller.refresh),
-        child: const SingleChildScrollView(
-          child: Column(
-            children: [
-              GuestbookHeader(),
-              GuestbookEntryList(),
-            ],
-          ),
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(controller.refresh),
+      child: const SingleChildScrollView(
+        child: Column(
+          children: [
+            SafeArea(child: SizedBox()),
+            SizedBox(height: 8),
+            GuestbookHeader(),
+            GuestbookEntryList(),
+          ],
         ),
       ),
     );

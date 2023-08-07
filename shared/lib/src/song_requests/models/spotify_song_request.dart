@@ -67,6 +67,11 @@ class SpotifySong implements SongRequest {
     return spotifySong(this);
   }
 
+  @override
+  String toString() {
+    return 'SpotifySongRequest($timestamp, $title)';
+  }
+
   static const String typeName = 'SpotifySongRequest';
   static const String idFieldName = 'spotifyId';
 }

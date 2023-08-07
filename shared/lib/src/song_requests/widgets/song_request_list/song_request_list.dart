@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shared/src/dependency_management/get_it_provider.dart';
 import 'package:shared/src/song_requests/models/song_request.dart';
 import 'package:shared/src/song_requests/shared_song_requests_feature.dart';
@@ -26,17 +25,23 @@ class SongRequestList extends StatefulWidget {
 class _SongRequestListState extends State<SongRequestList> {
   @override
   Widget build(BuildContext context) {
-    final controller = getIt<SongRequestPagingController>();
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(controller.refresh),
-      child: PagedListView<DateTime?, SongRequest>(
-        pagingController: controller,
-        padding: EdgeInsets.zero,
-        builderDelegate: PagedChildBuilderDelegate(
-          noItemsFoundIndicatorBuilder: _noItemsFoundIndicator,
-          itemBuilder: widget.itemBuilder ?? _buildItem,
-        ),
-      ),
+    final controller = getIt<SongRequestController>();
+    return ValueListenableBuilder<List<SongRequest>>(
+      valueListenable: controller,
+      builder: (context, items, _) {
+        if (items.isEmpty) {
+          return _noItemsFoundIndicator(context);
+        }
+        return ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: items.length,
+          itemBuilder: (context, index) => (widget.itemBuilder ?? _buildItem)(
+            context,
+            controller.value[index],
+            index,
+          ),
+        );
+      },
     );
   }
 

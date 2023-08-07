@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared/resources/images.dart';
 
 class GuestbookHeader extends StatelessWidget {
   const GuestbookHeader({super.key});
@@ -10,7 +9,6 @@ class GuestbookHeader extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Image(image: Images.homeHeader),
         Text(
           'TROUW',
           textAlign: TextAlign.center,
