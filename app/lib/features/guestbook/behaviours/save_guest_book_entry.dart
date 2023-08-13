@@ -52,7 +52,6 @@ class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, GuestbookEntry> {
         contentDisposition: input.pictureFile.name,
         contentEncoding: 'image',
         customMetadata: {
-          'timestamp': input.timestamp.toIso8601String(),
           'message': input.message,
         },
       ),
