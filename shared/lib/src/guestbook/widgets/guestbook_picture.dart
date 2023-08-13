@@ -24,6 +24,10 @@ class GuestbookPicture extends StatelessWidget {
         : CachedNetworkImage(
             imageUrl: uri,
             fit: BoxFit.fitWidth,
+            errorWidget: (context, _, __) => const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('Foto niet gevonden', textAlign: TextAlign.center),
+            ),
             placeholder: (context, _) => _loadingIndicator(),
           );
   }

@@ -20,20 +20,12 @@ class DeleteGuestbookEntry extends Behaviour<GuestbookEntry, void> {
 
   @override
   Future<void> action(GuestbookEntry input, BehaviourTrack? track) async {
-    final picture = storage.picture(input.id);
-    final pictureData = await picture.getData();
-    if (pictureData == null) {
-      return;
-    }
-
-    await storage.ref('deletedPictures').child(input.id).putData(pictureData);
-    await firestore.collection('deletedEntries').add({
-      'timestamp': input.timestamp,
-      'message': input.message,
-    });
+    await firestore
+        .collection('deletedEntries')
+        .doc(input.id)
+        .set(input.toFirestore());
 
     await firestore.guestbookEntries.doc(input.id).delete();
-    await picture.delete();
 
     guestbookPagingController.itemList =
         guestbookPagingController.itemList?.toList()?..remove(input);

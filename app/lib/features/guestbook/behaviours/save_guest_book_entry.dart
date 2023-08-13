@@ -43,24 +43,29 @@ class SaveGuestbookEntry extends Behaviour<NewGuestbookEntry, GuestbookEntry> {
     NewGuestbookEntry input,
     BehaviourTrack? track,
   ) async {
-    final reference = await firestore.guestbookEntries.add({
-      'timestamp': input.timestamp,
-      'message': input.message,
-    });
+    final reference = firestore.guestbookEntries.doc();
+
     final remotePicture = storage.picture(reference.id);
     await remotePicture.putFile(
       File(input.pictureFile.path),
       SettableMetadata(
         contentDisposition: input.pictureFile.name,
         contentEncoding: 'image',
+        customMetadata: {
+          'timestamp': input.timestamp.toIso8601String(),
+          'message': input.message,
+        },
       ),
     );
 
-    return GuestbookEntry(
+    final entry = GuestbookEntry(
       id: reference.id,
       timestamp: input.timestamp,
       message: input.message,
       pictureUri: await remotePicture.getDownloadURL(),
     );
+    await reference.set(entry.toFirestore());
+
+    return entry;
   }
 }

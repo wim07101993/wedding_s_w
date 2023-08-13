@@ -99,7 +99,7 @@ class _NewGuestbookEntryScreenState extends State<NewGuestbookEntryScreen> {
             const SizedBox(width: 16),
             IconButton.filled(
               iconSize: 32,
-              onPressed: () => saveGuestbookEntry(picture),
+              onPressed: isSaving ? null : () => saveGuestbookEntry(picture),
               icon: const Icon(Icons.send),
             ),
           ],
